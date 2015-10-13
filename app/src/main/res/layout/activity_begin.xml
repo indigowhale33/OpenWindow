@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/ziptext"
             android:inputType="number"
-            android:hint="hello"
+            android:hint="Enter your Zipcode"
             android:layout_gravity="center"
             android:imeOptions="actionSend"/>
 

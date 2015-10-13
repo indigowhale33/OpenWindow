@@ -7,4 +7,11 @@
     tools:context="com.kevinandsteve.openwindow.ResultActivity">
 
 
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/resulttext"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>
