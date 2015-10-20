@@ -44,7 +44,7 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_page);
         EditText xmlshow = (EditText) findViewById(R.id.resulttext);
-        
+
         Intent extras = getIntent();
         int zipcode = -1;
         if (extras != null) {
