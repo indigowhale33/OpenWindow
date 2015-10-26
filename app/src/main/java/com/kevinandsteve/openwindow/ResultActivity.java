@@ -1,16 +1,12 @@
 package com.kevinandsteve.openwindow;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -38,6 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class ResultActivity extends AppCompatActivity {
     //progress dialog
     private static String xmlresponse;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -57,6 +54,8 @@ public class ResultActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(getApplicationContext(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), Toast.LENGTH_SHORT);
         toast.show();
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         try {
             xmlresponse = sendGet(strurl);
@@ -106,6 +105,21 @@ public class ResultActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        button = (Button) findViewById(R.id.button);
+
+        // Capture button clicks
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+
+                // Start NewActivity.class
+                Intent myIntent = new Intent(ResultActivity.this,
+                        ContactActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
 
 
     }
