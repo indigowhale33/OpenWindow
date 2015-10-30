@@ -3,6 +3,7 @@ package com.kevinandsteve.openwindow;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,11 +52,15 @@ public class beginActivity extends Activity {
      */
     private SystemUiHider mSystemUiHider;
 
+    public static final String OWPREF = "Owpref"; //preference file name
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_begin);
+        SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content_controls);
@@ -115,6 +120,9 @@ public class beginActivity extends Activity {
         });
 
         final EditText editText = (EditText) findViewById(R.id.ziptext);
+        if(prefs.getString("USERZIP", null) != null){
+            editText.setText((prefs.getString("USERZIP", null)));
+        }
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -125,6 +133,8 @@ public class beginActivity extends Activity {
                     handled = true;
                     Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                     EditText editText = (EditText) findViewById(R.id.ziptext);
+                    editor.putString("USERZIP",editText.getText().toString());  //store zipcode
+                    editor.apply();
                     int message = Integer.parseInt(editText.getText().toString());
                     Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
                     toast.show();

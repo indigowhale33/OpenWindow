@@ -28,9 +28,29 @@
             android:label="@string/title_activity_result" >
         </activity>
         <activity
-            android:name=".ContactActivity"
+            android:name=".NotificationMain"
             android:label="@string/title_activity_contactlist" >
         </activity>
+
+        <service
+            android:name=".SelfNotifBack"/>
+
+        <receiver android:name=".AppReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".DeviceBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <!--<intent-filter>-->
+            <!--<action android:name="com.tutorialspoint.CUSTOM_INTENT">-->
+            <!--</action>-->
+        <!--</intent-filter>-->
     </application>
 
 </manifest>

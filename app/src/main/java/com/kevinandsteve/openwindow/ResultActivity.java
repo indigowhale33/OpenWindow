@@ -41,6 +41,7 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_page);
         EditText xmlshow = (EditText) findViewById(R.id.resulttext);
+        button = (Button) findViewById(R.id.button);
 
         Intent extras = getIntent();
         int zipcode = -1;
@@ -51,8 +52,8 @@ public class ResultActivity extends AppCompatActivity {
         String fDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + strzip + "&date=" + fDate + "&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
         //String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=23185&date=2015-10-12&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
-        Toast toast = Toast.makeText(getApplicationContext(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), Toast.LENGTH_SHORT);
-        toast.show();
+//        Toast toast = Toast.makeText(getApplicationContext(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), Toast.LENGTH_SHORT);
+//        toast.show();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -97,6 +98,7 @@ public class ResultActivity extends AppCompatActivity {
             } else {
                 resp = "\nInvalid Zipcode / Try nearby zipcode";
                 xmlshow.append(resp);
+                button.setVisibility(View.INVISIBLE);
             }
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -107,25 +109,25 @@ public class ResultActivity extends AppCompatActivity {
         }
 
 
-        button = (Button) findViewById(R.id.button);
 
         // Capture button clicks
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0) {
 
                 // Start NewActivity.class
-                Intent myIntent = new Intent(ResultActivity.this,
-                        ContactActivity.class);
+                Intent myIntent = new Intent(getBaseContext(),
+                        NotificationMain.class);
                 startActivity(myIntent);
             }
         });
 
 
 
+
     }
 
 
-    private String sendGet(String strurl) throws Exception {
+    public static String sendGet(String strurl) throws Exception {
         String USER_AGENT = "Mozilla/5.0";
         String url = strurl;
 
@@ -153,8 +155,8 @@ public class ResultActivity extends AppCompatActivity {
         in.close();
 
         //print result
-        Toast toast = Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT);
-        toast.show();
+//        Toast toast = Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT);
+//        toast.show();
 
         return response.toString();
     }
