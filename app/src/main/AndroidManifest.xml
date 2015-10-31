@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -36,15 +37,16 @@
             android:name=".SelfNotifBack"/>
 
         <receiver android:name=".AppReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+            <!--</intent-filter>-->
         </receiver>
 
-        <receiver android:name=".DeviceBootReceiver"
-            android:enabled="false">
+        <receiver android:name=".BootReceiver" android:enabled="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
         <!--<intent-filter>-->
