@@ -26,8 +26,8 @@ import java.util.Calendar;
  * Created by Steve on 2015-10-26.
  */
 public class NotificationMain extends AppCompatActivity {
-    CheckBox ch1;
-    EditText timetext;
+    CheckBox ch1, ch2;
+    EditText timetext, othertxt;
     private PendingIntent pendingIntent;
     public static final String OWPREF = "Owpref" ;
     SharedPreferences sharedpreferences;
@@ -43,8 +43,11 @@ public class NotificationMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notif_main);
         ch1=(CheckBox)findViewById(R.id.checkBox1);   //checkbox for the user itself
+        ch2=(CheckBox)findViewById(R.id.checkBox2);   //checkbox for the user itself
         timetext= (EditText)findViewById(R.id.textv); //textfield for user
+        othertxt= (EditText)findViewById(R.id.othertext); //textfield for user
         timetext.setKeyListener(null);       // make user cannot edit the textfield
+        othertxt.setKeyListener(null);       // make user cannot edit the textfield
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
 
@@ -90,6 +93,22 @@ public class NotificationMain extends AppCompatActivity {
                     editor.remove("MYSELFHR");
                     editor.remove("MYSELFMIN");
                     editor.apply();
+                }
+            }
+        });
+
+        ch2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ch1.isChecked()) {
+                    DialogFragment newFragment = new TimePickerFragment();
+                    othertxt.setText(timetext.getText());
+                    newFragment.show(getFragmentManager(), "TimePicker");
+
+                } else {
+                    othertxt.setText("Set Yourself Daily Notification");
+
+
                 }
             }
         });

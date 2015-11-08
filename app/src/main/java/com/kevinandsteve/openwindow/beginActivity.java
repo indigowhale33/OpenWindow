@@ -1,6 +1,5 @@
 package com.kevinandsteve.openwindow;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +24,7 @@ import com.kevinandsteve.openwindow.util.SystemUiHider;
  * @see SystemUiHider
  */
 public class beginActivity extends Activity {
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -57,13 +58,28 @@ public class beginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_begin);
+        Button sendb = (Button) this.findViewById(R.id.sendbut);
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content_controls);
+
+        sendb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+
+                Intent intent = new Intent(getBaseContext(), ResultActivity.class);
+                EditText editText = (EditText) findViewById(R.id.ziptext);
+                editor.putString("USERZIP", editText.getText().toString());  //store zipcode
+                editor.apply();
+                int message = Integer.parseInt(editText.getText().toString());
+                Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
+                toast.show();
+                intent.putExtra("EXTRA_ZIPCODE", message);
+                startActivity(intent);
+            }
+        });
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -76,7 +92,6 @@ public class beginActivity extends Activity {
                     int mShortAnimTime;
 
                     @Override
-                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
                     public void onVisibilityChange(boolean visible) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
                             // If the ViewPropertyAnimator API is available
@@ -123,6 +138,7 @@ public class beginActivity extends Activity {
         if(prefs.getString("USERZIP", null) != null){
             editText.setText((prefs.getString("USERZIP", null)));
         }
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -130,10 +146,18 @@ public class beginActivity extends Activity {
 
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
 
+                    Thread thread = new Thread(new Runnable(){
+                        @Override
+                        public void run(){
+                            //code to do the HTTP request
+                        }
+                    });
+                    thread.start();
+
                     handled = true;
                     Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                     EditText editText = (EditText) findViewById(R.id.ziptext);
-                    editor.putString("USERZIP",editText.getText().toString());  //store zipcode
+                    editor.putString("USERZIP", editText.getText().toString());  //store zipcode
                     editor.apply();
                     int message = Integer.parseInt(editText.getText().toString());
                     Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
@@ -144,6 +168,8 @@ public class beginActivity extends Activity {
                 return handled;
             }
         });
+
+
 
     }
 

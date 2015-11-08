@@ -28,6 +28,13 @@
             android:layout_gravity="center"
             android:imeOptions="actionSend"/>
 
+        <Button
+            android:layout_width="74dp"
+            android:layout_height="60dp"
+            android:text="send"
+            android:id="@+id/sendbut"
+            android:layout_gravity="right|center_vertical" />
+
     </FrameLayout>
 
 </FrameLayout>
