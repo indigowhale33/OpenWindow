@@ -73,6 +73,7 @@ public class beginActivity extends Activity {
                 EditText editText = (EditText) findViewById(R.id.ziptext);
                 editor.putString("USERZIP", editText.getText().toString());  //store zipcode
                 editor.apply();
+                editText.setSelection(editText.getText().length());
                 int message = Integer.parseInt(editText.getText().toString());
                 Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
                 toast.show();
@@ -159,6 +160,7 @@ public class beginActivity extends Activity {
                     EditText editText = (EditText) findViewById(R.id.ziptext);
                     editor.putString("USERZIP", editText.getText().toString());  //store zipcode
                     editor.apply();
+                    editText.setSelection(editText.getText().length());
                     int message = Integer.parseInt(editText.getText().toString());
                     Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
                     toast.show();
