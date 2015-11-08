@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parent"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.06"
+        android:id="@+id/child1">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/checkBox1"
+            android:longClickable="false" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Yourself Daily Notification"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/textv" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/checkBox2"
+                android:longClickable="false" />
+
+            <EditText
+                android:layout_width="296dp"
+                android:layout_height="34dp"
+                android:text="New Text"
+                android:id="@+id/othertext" />
+
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:text="Add"
+                android:layout_gravity="right"
+                android:id="@+id/button2" />
+        </LinearLayout>
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="451dp"
+            android:id="@+id/noti_others"
+            android:clickable="true" />
+
+    </LinearLayout>
+
+</LinearLayout>
