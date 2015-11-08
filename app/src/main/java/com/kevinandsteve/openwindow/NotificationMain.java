@@ -13,11 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -30,6 +32,12 @@ public class NotificationMain extends AppCompatActivity {
     public static final String OWPREF = "Owpref" ;
     SharedPreferences sharedpreferences;
 
+    //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
+    ArrayList<String> listItems=new ArrayList<String>();
+
+    //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
+    ArrayAdapter<String> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,12 @@ public class NotificationMain extends AppCompatActivity {
         timetext.setKeyListener(null);       // make user cannot edit the textfield
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
+
+        //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
+        ArrayList<String> listItems=new ArrayList<String>();
+
+        //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
+        ArrayAdapter<String> adapter;
 
         Integer restoredhr = prefs.getInt("MYSELFHR", -1);
         Integer restoredmin = prefs.getInt("MYSELFMIN", -1);

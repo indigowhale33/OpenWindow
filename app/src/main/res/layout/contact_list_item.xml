@@ -4,13 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
     <CheckBox
-        android:id="@+id/checkBox1"
+        android:id="@+id/checkothers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/othersname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="TextView" />
+    <TextView
+        android:id="@+id/otherphone"
+        android:layout_width="79dp"
+        android:layout_height="28dp"
         android:text="TextView" />
 </LinearLayout>

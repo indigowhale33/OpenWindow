@@ -108,10 +108,8 @@ public class ContactActivity extends ListActivity{
                     }
 
                     SelectUser selectUser = new SelectUser();
-                    selectUser.setThumb(bit_thumb);
                     selectUser.setName(name);
                     selectUser.setPhone(phoneNumber);
-                    selectUser.setEmail(id);
                     selectUser.setCheckedBox(false);
                     selectUsers.add(selectUser);
                 }

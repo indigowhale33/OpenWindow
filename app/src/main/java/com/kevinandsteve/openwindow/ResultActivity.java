@@ -69,8 +69,8 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         xmlshow.setText(xmlresponse);
-        Toast toast2 = Toast.makeText(getApplicationContext(), xmlresponse, Toast.LENGTH_SHORT);
-        toast2.show();
+        //Toast toast2 = Toast.makeText(getApplicationContext(), xmlresponse, Toast.LENGTH_SHORT);
+        //toast2.show();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = null;
         String resp = null;
