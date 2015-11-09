@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#ffffff"
+    android:layout_height="match_parent" android:background="#334455"
     tools:context=".beginActivity">
 
 
@@ -18,23 +18,36 @@
 
         </LinearLayout>
 
-
+        <LinearLayout
+            android:layout_width="match_parent"  android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="350dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/openwindowlogo"
+                android:layout_gravity="center"/>
         <EditText
             android:layout_width="192dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20px"
             android:id="@+id/ziptext"
             android:inputType="number"
             android:hint="Enter your Zipcode"
+            android:gravity="center"
+            android:textColor="#fefefe"
             android:layout_gravity="center"
             android:imeOptions="actionSend"/>
 
         <Button
-            android:layout_width="74dp"
-            android:layout_height="60dp"
-            android:text="send"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:text=""
+            android:background="@drawable/findaqi"
             android:id="@+id/sendbut"
-            android:layout_gravity="right|center_vertical" />
-
+            android:layout_gravity="center" />
+        </LinearLayout>
     </FrameLayout>
 
 </FrameLayout>
