@@ -1,21 +1,28 @@
 package com.kevinandsteve.openwindow;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +35,7 @@ import java.util.Calendar;
 public class NotificationMain extends AppCompatActivity {
     CheckBox ch1, ch2;
     EditText timetext, othertxt;
+    Button addbutt;
     private PendingIntent pendingIntent;
     public static final String OWPREF = "Owpref" ;
     SharedPreferences sharedpreferences;
@@ -38,24 +46,38 @@ public class NotificationMain extends AppCompatActivity {
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     ArrayAdapter<String> adapter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notif_main);
         ch1=(CheckBox)findViewById(R.id.checkBox1);   //checkbox for the user itself
         ch2=(CheckBox)findViewById(R.id.checkBox2);   //checkbox for the user itself
+        addbutt = (Button)findViewById(R.id.addothers);
         timetext= (EditText)findViewById(R.id.textv); //textfield for user
         othertxt= (EditText)findViewById(R.id.othertext); //textfield for user
+
         timetext.setKeyListener(null);       // make user cannot edit the textfield
         othertxt.setKeyListener(null);       // make user cannot edit the textfield
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
 
-        //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
-        ArrayList<String> listItems=new ArrayList<String>();
-
-        //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
-        ArrayAdapter<String> adapter;
+        // Construct the data source
+        ArrayList<Others> arrayOfUsers = new ArrayList<Others>();
+        // Create the adapter to convert the array to views
+        OthersAdapter adapter = new OthersAdapter(this, arrayOfUsers);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.noti_others);
+        listView.setAdapter(adapter);
+        Others newUser = new Others("Nathan", "7575757" , null);
+        Others newUser2 = new Others("Steve", "2575215757" , null);
+        Others newUser3 = new Others("Kevin", "757151257" , null);
+        Others newUser4 = new Others("Daniel", "757575237" , null);
+        adapter.add(newUser);
+        adapter.add(newUser2);
+        adapter.add(newUser3);
+        adapter.add(newUser4);
 
         Integer restoredhr = prefs.getInt("MYSELFHR", -1);
         Integer restoredmin = prefs.getInt("MYSELFMIN", -1);
@@ -73,6 +95,18 @@ public class NotificationMain extends AppCompatActivity {
         /* Retrieve a PendingIntent that will perform a broadcast */
         Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, alarmIntent, 0);
+
+//        addbutt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+//                startActivityForResult(intent, 1);
+//
+//            }
+//        });
+
 
         ch1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +135,11 @@ public class NotificationMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ch1.isChecked()) {
-                    DialogFragment newFragment = new TimePickerFragment();
-                    othertxt.setText(timetext.getText());
+                    DialogFragment newFragment = new TimeOtherFragment();
                     newFragment.show(getFragmentManager(), "TimePicker");
 
                 } else {
-                    othertxt.setText("Set Yourself Daily Notification");
+                    othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
 
 
                 }
@@ -135,7 +168,33 @@ public class NotificationMain extends AppCompatActivity {
 
             }
         });
+
+
+        othertxt.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if (ch2.isChecked()) {
+                 //   setAlarm();
+                }
+
+
+            }
+        });
+
     }
+
+
 
     public void setAlarm(){
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);

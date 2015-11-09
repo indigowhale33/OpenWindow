@@ -31,11 +31,11 @@ public class TimeOtherFragment extends DialogFragment implements TimePickerDialo
     public void onTimeSet(TimePicker view, int hourOfDay, int minute){
         //Do something with the user chosen time
         //Get reference of host activity (XML Layout File) TextView widget
-        TextView tv = (TextView) getActivity().findViewById(R.id.textv);
+        TextView other = (TextView) getActivity().findViewById(R.id.othertext);
         //Set a message for user
         //tv.setText("Your chosen time is...");
         //Display the user changed time on TextView
-        tv.setText("You will be notified daily at "+ String.valueOf(hourOfDay)+" : "
+        other.setText("People will be notified daily at "+ String.valueOf(hourOfDay)+" : "
                 + String.valueOf(minute));
     }
 }

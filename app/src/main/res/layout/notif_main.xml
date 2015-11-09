@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.06"
-        android:id="@+id/child1">
+        android:id="@+id/child1"
+        android:layout_marginTop="10dp">
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -34,7 +35,9 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        >
 
         <LinearLayout
             android:orientation="horizontal"
@@ -50,24 +53,29 @@
                 android:longClickable="false" />
 
             <EditText
-                android:layout_width="296dp"
-                android:layout_height="34dp"
+                android:layout_width="254dp"
+                android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/othertext" />
+                android:id="@+id/othertext"
+                />
 
             <Button
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:text="Add"
                 android:layout_gravity="right"
-                android:id="@+id/button2" />
+                android:id="@+id/addothers" />
         </LinearLayout>
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="451dp"
             android:id="@+id/noti_others"
-            android:clickable="true" />
+            android:clickable="true"
+            android:divider="#FFCC00"
+            android:dividerHeight="4px"
+            android:layout_margin="10dp"
+            />
 
     </LinearLayout>
 
