@@ -70,7 +70,12 @@ public class NotificationMain extends AppCompatActivity {
 
         prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
-        othertxt.setText( prefs.getString("OTHERSNAME","NONAME!"));
+//        Iterator testit = prefs.getStringSet("OTHERSPHONE",new TreeSet<String>()).iterator();
+//        String str = "";
+//        while(testit.hasNext()){
+//            str += testit.next();
+//        }
+//        othertxt.setText(str);
         // Construct the data source
         ArrayList<Others> arrayOfUsers = new ArrayList<Others>();
         // Create the adapter to convert the array to views

@@ -104,8 +104,8 @@ public class OthersAdapter extends ArrayAdapter<Others> {
                     editor.remove("CheckValue"+position);
                     editor.putBoolean("CheckValue" + position, isChecked);
                     editor.commit();
-                    Set<String> NameSet = new TreeSet<String>(prefs.getStringSet("OTHERSNAME", new TreeSet<String>()));
-                    Set<String> PhoneSet = new TreeSet<String>(prefs.getStringSet("OTHERSPHONE", new TreeSet<String>()));
+                    Set<String> NameSet = new TreeSet<String>(sharedPrefs.getStringSet("OTHERSNAME", new TreeSet<String>()));
+                    Set<String> PhoneSet = new TreeSet<String>(sharedPrefs.getStringSet("OTHERSPHONE", new TreeSet<String>()));
 
                     if(isChecked){
                         editor.remove("OTHERSNAME");
