@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.telephony.SmsManager;
+import android.widget.Toast;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,6 +23,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -85,6 +90,8 @@ public class SelfNotifBack extends Service{
 //                        xmlshow.append(resp);
 //                        xmlshow.append(Integer.toString(nList.getLength()));
                         Notify("OpenWindow","DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent());
+                        Iterator check = prefs.getStringSet("OthersContacts", null).iterator();
+
                     }
                 } else {
                     resp = "\nInvalid Zipcode / Try nearby zipcode";
@@ -118,5 +125,27 @@ public class SelfNotifBack extends Service{
         Notification notification = new Notification(R.mipmap.ic_launcher,"New Message", System.currentTimeMillis());
         notification.setLatestEventInfo(SelfNotifBack.this, notificationTitle,notificationMessage, pendingIntent);
         notificationManager.notify(9999, notification);
+    }
+
+    protected void sendSMSMessage(Iterator contacts, String message) {
+        String contact="";
+
+        while(contacts.hasNext()){
+            contact = ((String)contacts.next()).split(": ")[1];
+
+            try {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(contact, null, message, null, null);
+                Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+            }
+
+            catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "SMS faild, please try again.", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 }

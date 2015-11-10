@@ -3,22 +3,21 @@ package com.kevinandsteve.openwindow;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -28,23 +27,30 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Steve on 2015-10-26.
  */
 public class NotificationMain extends AppCompatActivity {
+    int ADD_DIALOG_ID = 0;
+    ListView dialog_ListView;
     CheckBox ch1, ch2;
     EditText timetext, othertxt;
     Button addbutt;
     private PendingIntent pendingIntent;
     public static final String OWPREF = "Owpref" ;
-    SharedPreferences sharedpreferences;
+    SharedPreferences prefs;
 
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     ArrayList<String> listItems=new ArrayList<String>();
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     ArrayAdapter<String> adapter;
+
+
 
 
 
@@ -58,27 +64,26 @@ public class NotificationMain extends AppCompatActivity {
         timetext= (EditText)findViewById(R.id.textv); //textfield for user
         othertxt= (EditText)findViewById(R.id.othertext); //textfield for user
 
+
         timetext.setKeyListener(null);       // make user cannot edit the textfield
         othertxt.setKeyListener(null);       // make user cannot edit the textfield
-        SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
 
+        prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
+        final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
+        othertxt.setText( prefs.getString("OTHERSNAME","NONAME!"));
         // Construct the data source
         ArrayList<Others> arrayOfUsers = new ArrayList<Others>();
         // Create the adapter to convert the array to views
         OthersAdapter adapter = new OthersAdapter(this, arrayOfUsers);
         // Attach the adapter to a ListView
-        ListView listView = (ListView) findViewById(R.id.noti_others);
-        listView.setAdapter(adapter);
-        Others newUser = new Others("Nathan", "7575757" , null);
-        Others newUser2 = new Others("Steve", "2575215757" , null);
-        Others newUser3 = new Others("Kevin", "757151257" , null);
-        Others newUser4 = new Others("Daniel", "757575237" , null);
-        adapter.add(newUser);
-        adapter.add(newUser2);
-        adapter.add(newUser3);
-        adapter.add(newUser4);
+        final ListView listView = (ListView) findViewById(R.id.noti_others);
 
+        Set<String> exOtherC = new TreeSet<String>(prefs.getStringSet("OthersContacts", new TreeSet<String>()));
+        Iterator exIt = exOtherC.iterator();
+
+        add_adapter(exOtherC, exIt, adapter);
+        listView.setAdapter(adapter);
+        //Toast.makeText(NotificationMain.this, ((TextView)findViewById(R.id.othersname)).getText(), Toast.LENGTH_SHORT).show();
         Integer restoredhr = prefs.getInt("MYSELFHR", -1);
         Integer restoredmin = prefs.getInt("MYSELFMIN", -1);
         String restore_selfch = prefs.getString("SELFCHECKED","n");
@@ -96,16 +101,62 @@ public class NotificationMain extends AppCompatActivity {
         Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, alarmIntent, 0);
 
-//        addbutt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-//                startActivityForResult(intent, 1);
-//
-//            }
-//        });
+        addbutt.setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View v) {
+
+//                showDialog(ADD_DIALOG_ID);
+                final ArrayList contacts = (RetContacts());
+                final String[] contactsstr = (String[])contacts.toArray(new String[contacts.size()]);
+                AlertDialog.Builder builder = new AlertDialog.Builder(NotificationMain.this);
+                builder.setTitle("Add contacts");
+                builder.setView(LayoutInflater.from(NotificationMain.this).inflate(R.layout.dialog_list, null));
+                final ArrayList<String> selectedItems = new ArrayList<String>();
+                builder.setMultiChoiceItems(contactsstr, null, new DialogInterface.OnMultiChoiceClickListener() {
+
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if(isChecked){
+                            selectedItems.add(contactsstr[which]);
+                        }else{
+                            selectedItems.remove(contactsstr[which]);
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        OthersAdapter otheradapter = ((OthersAdapter) (listView.getAdapter()));
+                        Set<String> newcontacts = prefs.getStringSet("OthersContacts", new TreeSet<String>());
+                        Set<String> ncontacts = new TreeSet<String>();
+                        String selectedd = "";
+
+                       // Toast.makeText(NotificationMain.this, selectedd, Toast.LENGTH_SHORT).show();
+                        for(String selected: selectedItems){
+                            if(!newcontacts.contains(selected)){
+                                newcontacts.add(selected);
+                                ncontacts.add(selected);
+                            }
+
+//                            Others addsel = new Others(parts[0], parts[1],"n");
+//                            otheradapter.add(addsel);
+                        }
+                        //Toast.makeText(NotificationMain.this, check, Toast.LENGTH_SHORT).show();
+                        editor.remove("OthersContacts");
+                        editor.apply();
+                        editor.putStringSet("OthersContacts", newcontacts);
+                        editor.apply();
+                        add_adapter( newcontacts,ncontacts.iterator(), (OthersAdapter) listView.getAdapter());
+
+                        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+                    }
+                });
+                builder.show();
+            }
+        });
 
 
         ch1.setOnClickListener(new View.OnClickListener() {
@@ -238,5 +289,27 @@ public class NotificationMain extends AppCompatActivity {
                 AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
+
+    protected ArrayList<String> RetContacts(){
+        ArrayList <String> contacts= new ArrayList<String>();
+        Cursor cursor = getContentResolver().query(   ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,null, null);
+
+        while (cursor.moveToNext()) {
+            String name =cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)) + ": " + (cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("/n","-"));
+            //String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            contacts.add(name);
+        }
+        cursor.close();
+        return contacts;
+    }
+
+    protected void add_adapter(Set set, Iterator it, OthersAdapter adapter){
+
+        while(it.hasNext()) {
+            String[] parts = ((String) it.next()).split(": ");
+            Others newUser = new Others(parts[0], parts[1], false);
+            adapter.add(newUser);
+        }
+    }
 
 }

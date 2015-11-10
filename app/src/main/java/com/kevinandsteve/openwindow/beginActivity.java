@@ -71,6 +71,8 @@ public class beginActivity extends Activity {
 
                 Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                 EditText editText = (EditText) findViewById(R.id.ziptext);
+                editor.remove("USERZIP");
+                editor.apply();
                 editor.putString("USERZIP", editText.getText().toString());  //store zipcode
                 editor.apply();
                 editText.setSelection(editText.getText().length());
@@ -139,7 +141,7 @@ public class beginActivity extends Activity {
         if(prefs.getString("USERZIP", null) != null){
             editText.setText((prefs.getString("USERZIP", null)));
         }
-
+        editor.clear();
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -158,6 +160,8 @@ public class beginActivity extends Activity {
                     handled = true;
                     Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                     EditText editText = (EditText) findViewById(R.id.ziptext);
+                    editor.remove("USERZIP");
+                    editor.apply();
                     editor.putString("USERZIP", editText.getText().toString());  //store zipcode
                     editor.apply();
                     editText.setSelection(editText.getText().length());

@@ -54,7 +54,7 @@ public class SelectUserAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.contact_info, null);
+            view = li.inflate(R.layout.contact_list_item, null);
             Log.e("Inside", "here--------------------------- In view1");
         } else {
             view = convertView;

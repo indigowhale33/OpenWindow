@@ -6,11 +6,23 @@ package com.kevinandsteve.openwindow;
 public class Others {
     public String name;
     public String number;
-    public String checked;
-    public Others(String name, String number, String checked){
+    public boolean checked;
+    public Others(String name, String number, boolean checked){
         this.name = name;
         this.number = number;
         this.checked = checked;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public boolean getCheck(){
+        return checked;
+    }
+
+    public String getNumber(){
+        return number;
     }
 
 }

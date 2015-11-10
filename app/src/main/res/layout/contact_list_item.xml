@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:weightSum="1">
     <CheckBox
         android:id="@+id/checkothers"
         android:layout_width="wrap_content"
@@ -10,12 +11,16 @@
         android:text="" />
     <TextView
         android:id="@+id/othersname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:text="TextView"
+        android:layout_weight="0.61"
+        android:layout_marginRight="10dp"/>
     <TextView
         android:id="@+id/otherphone"
-        android:layout_width="79dp"
-        android:layout_height="28dp"
-        android:text="TextView" />
+        android:layout_width="207dp"
+        android:layout_height="27dp"
+        android:text="TextView"
+        android:layout_marginLeft="10dp"
+       />
 </LinearLayout>
