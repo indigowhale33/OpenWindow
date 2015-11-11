@@ -39,6 +39,9 @@ import javax.xml.parsers.ParserConfigurationException;
 public class SelfNotifBack extends Service{
     private PendingIntent pendingIntent;
     public static final String OWPREF = "Owpref" ;
+    String MYNOTICH = "MYNOTICH";
+    String OTHERSNOTICH = "OTHERSNOTICH";
+
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     private static String xmlresponse;
@@ -48,13 +51,14 @@ public class SelfNotifBack extends Service{
         prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
         String fDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());    //today's date
-        String restore_selfch = prefs.getString("SELFCHECKED", "n"); // to make sure
+        String restore_selfch = prefs.getString(MYNOTICH, "n");
+        String restore_otherch = prefs.getString(OTHERSNOTICH, "n");// to make sure
         String zipcode = prefs.getString("USERZIP", null);   // retrieve zipcode
-
+        Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        if(restore_selfch != "n" && zipcode != null){
+        if(restore_selfch != "n" | restore_otherch != "n" && zipcode != null){
             String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + zipcode + "&date=" + fDate + "&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
 
             try {
@@ -91,10 +95,12 @@ public class SelfNotifBack extends Service{
 //                        xmlshow.append(resp);
 //                        xmlshow.append(Integer.toString(nList.getLength()));
                         String message = "AQI : " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n" + "Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
-                        if(prefs.getString("SELFNOTICHECK","") != "" && prefs.getString("SELFNOTICHECK", "") == "y") {
+                        if(prefs.getString(MYNOTICH, "") == "y") {
+                            Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
                             Notify("OpenWindow", "DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent());
                         }
-                        if(prefs.getString("OTHERNOTICHECK","") != "" && prefs.getString("OTHERNOTICHECK", "") == "y") {
+                        if(prefs.getString(OTHERSNOTICH, "") == "y") {
+                            Toast.makeText(SelfNotifBack.this, "OTHERNOTI", Toast.LENGTH_SHORT).show();
                             Iterator testit = prefs.getStringSet("OTHERSPHONE", new TreeSet<String>()).iterator();
                             sendSMSMessage(testit, message);
                         }
@@ -144,11 +150,10 @@ public class SelfNotifBack extends Service{
             try {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(contact, null, message, null, null);
-                Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "SMS sent."+contact, Toast.LENGTH_SHORT).show();
             }
 
             catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "SMS faild, please try again.", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 

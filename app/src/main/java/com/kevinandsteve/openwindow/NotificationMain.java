@@ -17,13 +17,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,8 +32,14 @@ import java.util.TreeSet;
  * Created by Steve on 2015-10-26.
  */
 public class NotificationMain extends AppCompatActivity {
-    int ADD_DIALOG_ID = 0;
-    ListView dialog_ListView;
+    String OTHERSHR = "OTHERSHR";
+    String OTHERSMIN = "OTHERSMIN";
+    String OTHERSNOTICH = "OTHERSNOTICH";
+    String MYNOTIHR = "MYNOTIHR";
+    String MYNOTIMIN = "MYNOTIMIN";
+    String MYNOTICH = "MYNOTICH";
+
+
     CheckBox ch1, ch2;
     EditText timetext, othertxt;
     Button addbutt;
@@ -89,9 +92,9 @@ public class NotificationMain extends AppCompatActivity {
         add_adapter(exOtherC, exIt, adapter);
         listView.setAdapter(adapter);
         //Toast.makeText(NotificationMain.this, ((TextView)findViewById(R.id.othersname)).getText(), Toast.LENGTH_SHORT).show();
-        Integer restoredhr = prefs.getInt("MYSELFHR", -1);
-        Integer restoredmin = prefs.getInt("MYSELFMIN", -1);
-        String restore_selfch = prefs.getString("SELFCHECKED","n");
+        Integer restoredhr = prefs.getInt(MYNOTIHR, -1);
+        Integer restoredmin = prefs.getInt(MYNOTIMIN, -1);
+        String restore_selfch = prefs.getString(MYNOTICH,"n");
 
         if(restoredmin != -1 && restoredhr != -1){  // if no previous time set,
             timetext.setText("Your notification will be at "+restoredhr + " : " + restoredmin);
@@ -104,14 +107,14 @@ public class NotificationMain extends AppCompatActivity {
         }
 
 
-        Integer others_hr = prefs.getInt("OTHERSHR", -1);      // other's notification hour
-        Integer others_min = prefs.getInt("OTHERSMIN", -1);    // other's notification min
-        String others_ch = prefs.getString("TOTOTHERSCH","n");  // total other's checkbox
+        Integer others_hr = prefs.getInt(OTHERSHR, -1);      // other's notification hour
+        Integer others_min = prefs.getInt(OTHERSMIN, -1);    // other's notification min
+        String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("Your notification will be at "+others_hr + " : " + others_min);
+            othertxt.setText("People will be notified daily at "+others_hr + " : " + others_min);
         }else{
-            othertxt.setText("Set Others' Daily Notification(SMS will be sent!");
+            othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
         }
 
         if(others_ch != "n"){
@@ -188,10 +191,11 @@ public class NotificationMain extends AppCompatActivity {
                 if (ch1.isChecked()) {
                     DialogFragment newFragment = new TimePickerFragment();
                     newFragment.show(getFragmentManager(), "TimePicker");
-                    editor.remove("MYSELFHR");
-                    editor.remove("MYSELFMIN");
-                    editor.remove("SELFCHECKED");
-                    editor.putString("SELFCHECKED", "y");
+                    editor.remove(MYNOTIHR);
+                    editor.remove(MYNOTIMIN);
+                    editor.remove(MYNOTICH);
+                    editor.apply();
+                    editor.putString(MYNOTICH, "y");
                     editor.apply();
                 } else {
                     timetext.setText("Set Yourself Daily Notification");
@@ -199,9 +203,9 @@ public class NotificationMain extends AppCompatActivity {
                         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         manager.cancel(pendingIntent);
                     }
-                    editor.remove("SELFCHECKED");
-                    editor.remove("MYSELFHR");
-                    editor.remove("MYSELFMIN");
+                    editor.remove(MYNOTICH);
+                    editor.remove(MYNOTIHR);
+                    editor.remove(MYNOTIMIN);
                     editor.apply();
                 }
             }
@@ -213,22 +217,23 @@ public class NotificationMain extends AppCompatActivity {
                 if (ch2.isChecked()) {
                     DialogFragment newFragment = new TimeOtherFragment();
                     newFragment.show(getFragmentManager(), "TimePicker");
-                    editor.remove("OTHERSHR");
-                    editor.remove("OTHERSMIN");
-                    editor.remove("TOTOTHERSCH");
-                    editor.putString("TOTOTHERSCH", "y");
+                    editor.remove(OTHERSHR);
+                    editor.remove(OTHERSMIN);
+                    editor.remove(OTHERSNOTICH);
                     editor.apply();
+                    editor.putString(OTHERSNOTICH, "y");
 
-
+                    editor.apply();
+                    String hi = prefs.getString(OTHERSNOTICH,"0");
                 } else {
                     othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
                     if(!ch1.isChecked()) {
                         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         manager.cancel(pendingIntent);
                     }
-                    editor.remove("TOTOTHERSCH");
-                    editor.remove("OTHERSHR");
-                    editor.remove("OTHERSMIN");
+                    editor.remove(OTHERSNOTICH);
+                    editor.remove(OTHERSHR);
+                    editor.remove(OTHERSMIN);
                     editor.apply();
 
                 }
@@ -251,7 +256,7 @@ public class NotificationMain extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (ch1.isChecked()) {
-                    setAlarm();
+                    setAlarm("ch1");
                     editor.remove("SELFNOTICHECK");
                     editor.apply();
                     editor.putString("SELFNOTICHECK", "y");
@@ -281,7 +286,7 @@ public class NotificationMain extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (ch2.isChecked()) {
-                    setAlarm();
+                    setAlarm("ch2");
                     editor.remove("TOTOTHERSCH");
                     editor.apply();
                     editor.putString("TOTOTHERSCH", "y");
@@ -298,31 +303,56 @@ public class NotificationMain extends AppCompatActivity {
 
 
 
-    public void setAlarm(){
+    public void setAlarm(String ch){
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
-        String beforetime = timetext.getText().toString();
-        beforetime = beforetime.replace("You will be notified daily at ", "");
+        String beforetime ="";
+        if(ch == "ch1") {
+            beforetime = timetext.getText().toString();
+            beforetime = beforetime.replace("You will be notified daily at ", "");
+        }else if(ch == "ch2"){
+            beforetime = othertxt.getText().toString();
+            beforetime = beforetime.replace("People will be notified daily at ", "");
+        }
         int ampm = 0;
         if(beforetime.contains("pm") && beforetime.split(" : ")[0] != "12"){
             ampm = 12;
         }
-        int hr =  Integer.valueOf(beforetime.split(" : ")[0]+ampm);
+        String a = beforetime.split(" : ")[0];
+        int hr =  Integer.valueOf(beforetime.split(" : ")[0])+ampm;
         int min =  Integer.valueOf(beforetime.split(" : ")[1].replace("am","").replace("pm",""));
-
-        Integer restoredhr = prefs.getInt("MYSELFHR", -1);
-        Integer restoredmin = prefs.getInt("MYSELFMIN", -1);
-        if(restoredhr != -1 && restoredmin != -1){
-            editor.remove("MYSELFHR");
-            editor.remove("MYSELFMIN");
-            editor.apply();
-            editor.putInt("MYSELFHR", hr);    //storing sharedpreference
-            editor.putInt("MYSELFMIN", min);  //storing sharedpreference
-            editor.apply();
-        }else{
-            editor.putInt("MYSELFHR", hr);    //storing sharedpreference
-            editor.putInt("MYSELFMIN", min);  //storing sharedpreference
-            editor.apply();
+        Integer restoredhr = -1;
+        Integer restoredmin = -1;
+        if(ch == "ch1") {
+            restoredhr = prefs.getInt(MYNOTIHR, -1);
+            restoredmin = prefs.getInt(MYNOTIMIN, -1);
+            if (restoredhr != -1 && restoredmin != -1) {
+                editor.remove(MYNOTIHR);
+                editor.remove(MYNOTIMIN);
+                editor.apply();
+                editor.putInt(MYNOTIHR, hr);    //storing sharedpreference
+                editor.putInt(MYNOTIMIN, min);  //storing sharedpreference
+                editor.apply();
+            } else {
+                editor.putInt(MYNOTIHR, hr);    //storing sharedpreference
+                editor.putInt(MYNOTIMIN, min);  //storing sharedpreference
+                editor.apply();
+            }
+        }else if(ch == "ch2"){
+            restoredhr = prefs.getInt(OTHERSHR, -1);
+            restoredmin = prefs.getInt(OTHERSMIN, -1);
+            if (restoredhr != -1 && restoredmin != -1) {
+                editor.remove(OTHERSHR);
+                editor.remove(OTHERSMIN);
+                editor.apply();
+                editor.putInt(OTHERSHR, hr);    //storing sharedpreference
+                editor.putInt(OTHERSMIN, min);  //storing sharedpreference
+                editor.apply();
+            } else {
+                editor.putInt(OTHERSHR, hr);    //storing sharedpreference
+                editor.putInt(OTHERSMIN, min);  //storing sharedpreference
+                editor.apply();
+            }
         }
 
 
@@ -346,7 +376,7 @@ public class NotificationMain extends AppCompatActivity {
 
 
     protected ArrayList<String> RetContacts(){
-        ArrayList <String> contacts= new ArrayList<String>();
+        ArrayList <String> contacts = new ArrayList<String>();
         Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
         while (cursor.moveToNext()) {

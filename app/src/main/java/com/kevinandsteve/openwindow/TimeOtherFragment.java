@@ -36,7 +36,10 @@ public class TimeOtherFragment extends DialogFragment implements TimePickerDialo
         //tv.setText("Your chosen time is...");
         //Display the user changed time on TextView
         String ampm = "am";
-        if (hourOfDay > 12){
+
+        if(hourOfDay == 12){
+            ampm = "pm";
+        } else if (hourOfDay > 12){
             hourOfDay = hourOfDay - 12;
             ampm = "pm";
         }
