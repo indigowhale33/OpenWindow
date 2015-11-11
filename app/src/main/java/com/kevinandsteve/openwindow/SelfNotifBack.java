@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -89,8 +90,14 @@ public class SelfNotifBack extends Service{
 //                        resp = eElement.getTextContent();
 //                        xmlshow.append(resp);
 //                        xmlshow.append(Integer.toString(nList.getLength()));
-                        Notify("OpenWindow","DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent());
-                        Iterator check = prefs.getStringSet("OthersContacts", null).iterator();
+                        String message = "AQI : " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n" + "Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
+                        if(prefs.getString("SELFNOTICHECK","") != "" && prefs.getString("SELFNOTICHECK", "") == "y") {
+                            Notify("OpenWindow", "DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent());
+                        }
+                        if(prefs.getString("OTHERNOTICHECK","") != "" && prefs.getString("OTHERNOTICHECK", "") == "y") {
+                            Iterator testit = prefs.getStringSet("OTHERSPHONE", new TreeSet<String>()).iterator();
+                            sendSMSMessage(testit, message);
+                        }
 
                     }
                 } else {
@@ -130,8 +137,9 @@ public class SelfNotifBack extends Service{
     protected void sendSMSMessage(Iterator contacts, String message) {
         String contact="";
 
+
         while(contacts.hasNext()){
-            contact = ((String)contacts.next()).split(": ")[1];
+            contact = ((String)contacts.next());
 
             try {
                 SmsManager smsManager = SmsManager.getDefault();

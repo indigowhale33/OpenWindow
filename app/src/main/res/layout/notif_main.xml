@@ -55,8 +55,8 @@
             <EditText
                 android:layout_width="254dp"
                 android:layout_height="wrap_content"
-                android:text="New Text"
                 android:id="@+id/othertext"
+                android:editable="false"
                 />
 
             <Button
@@ -69,12 +69,12 @@
 
         <ListView
             android:layout_width="wrap_content"
-            android:layout_height="451dp"
+            android:layout_height="wrap_content"
             android:id="@+id/noti_others"
             android:clickable="true"
             android:divider="#FFCC00"
-            android:dividerHeight="4px"
-            android:layout_margin="10dp"
+            android:dividerHeight="6px"
+            android:layout_margin="20dp"
             />
 
     </LinearLayout>

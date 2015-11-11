@@ -92,6 +92,7 @@ public class NotificationMain extends AppCompatActivity {
         Integer restoredhr = prefs.getInt("MYSELFHR", -1);
         Integer restoredmin = prefs.getInt("MYSELFMIN", -1);
         String restore_selfch = prefs.getString("SELFCHECKED","n");
+
         if(restoredmin != -1 && restoredhr != -1){  // if no previous time set,
             timetext.setText("Your notification will be at "+restoredhr + " : " + restoredmin);
         }else{
@@ -100,6 +101,21 @@ public class NotificationMain extends AppCompatActivity {
 
         if(restore_selfch != "n"){
             ch1.setChecked(true);
+        }
+
+
+        Integer others_hr = prefs.getInt("OTHERSHR", -1);      // other's notification hour
+        Integer others_min = prefs.getInt("OTHERSMIN", -1);    // other's notification min
+        String others_ch = prefs.getString("TOTOTHERSCH","n");  // total other's checkbox
+
+        if(others_hr != -1 && others_min != -1){  // if no previous time set,
+            othertxt.setText("Your notification will be at "+others_hr + " : " + others_min);
+        }else{
+            othertxt.setText("Set Others' Daily Notification(SMS will be sent!");
+        }
+
+        if(others_ch != "n"){
+            ch2.setChecked(true);
         }
 
         /* Retrieve a PendingIntent that will perform a broadcast */
@@ -114,7 +130,7 @@ public class NotificationMain extends AppCompatActivity {
                 final ArrayList contacts = (RetContacts());
                 final String[] contactsstr = (String[])contacts.toArray(new String[contacts.size()]);
                 AlertDialog.Builder builder = new AlertDialog.Builder(NotificationMain.this);
-                builder.setTitle("Add contacts");
+                builder.setTitle("Add Contacts");
                 builder.setView(LayoutInflater.from(NotificationMain.this).inflate(R.layout.dialog_list, null));
                 final ArrayList<String> selectedItems = new ArrayList<String>();
                 builder.setMultiChoiceItems(contactsstr, null, new DialogInterface.OnMultiChoiceClickListener() {
@@ -134,12 +150,10 @@ public class NotificationMain extends AppCompatActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        OthersAdapter otheradapter = ((OthersAdapter) (listView.getAdapter()));
                         Set<String> newcontacts = prefs.getStringSet("OthersContacts", new TreeSet<String>());
                         Set<String> ncontacts = new TreeSet<String>();
                         String selectedd = "";
 
-                       // Toast.makeText(NotificationMain.this, selectedd, Toast.LENGTH_SHORT).show();
                         for(String selected: selectedItems){
                             if(!newcontacts.contains(selected)){
                                 newcontacts.add(selected);
@@ -149,14 +163,18 @@ public class NotificationMain extends AppCompatActivity {
 //                            Others addsel = new Others(parts[0], parts[1],"n");
 //                            otheradapter.add(addsel);
                         }
-                        //Toast.makeText(NotificationMain.this, check, Toast.LENGTH_SHORT).show();
                         editor.remove("OthersContacts");
                         editor.apply();
                         editor.putStringSet("OthersContacts", newcontacts);
                         editor.apply();
-                        add_adapter( newcontacts,ncontacts.iterator(), (OthersAdapter) listView.getAdapter());
+                        if(ncontacts.size() == 0){
+                            //add_adapter( newcontacts,ncontacts.iterator(), (OthersAdapter) listView.getAdapter());
 
-                        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+                        }else {
+                            add_adapter(newcontacts, ncontacts.iterator(), (OthersAdapter) listView.getAdapter());
+
+                        }
+                        //((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
                     }
                 });
                 builder.show();
@@ -177,8 +195,10 @@ public class NotificationMain extends AppCompatActivity {
                     editor.apply();
                 } else {
                     timetext.setText("Set Yourself Daily Notification");
-                    AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                    manager.cancel(pendingIntent);
+                    if(!ch2.isChecked()) {
+                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        manager.cancel(pendingIntent);
+                    }
                     editor.remove("SELFCHECKED");
                     editor.remove("MYSELFHR");
                     editor.remove("MYSELFMIN");
@@ -190,13 +210,26 @@ public class NotificationMain extends AppCompatActivity {
         ch2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ch1.isChecked()) {
+                if (ch2.isChecked()) {
                     DialogFragment newFragment = new TimeOtherFragment();
                     newFragment.show(getFragmentManager(), "TimePicker");
+                    editor.remove("OTHERSHR");
+                    editor.remove("OTHERSMIN");
+                    editor.remove("TOTOTHERSCH");
+                    editor.putString("TOTOTHERSCH", "y");
+                    editor.apply();
+
 
                 } else {
                     othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
-
+                    if(!ch1.isChecked()) {
+                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        manager.cancel(pendingIntent);
+                    }
+                    editor.remove("TOTOTHERSCH");
+                    editor.remove("OTHERSHR");
+                    editor.remove("OTHERSMIN");
+                    editor.apply();
 
                 }
             }
@@ -219,7 +252,14 @@ public class NotificationMain extends AppCompatActivity {
                                       int before, int count) {
                 if (ch1.isChecked()) {
                     setAlarm();
+                    editor.remove("SELFNOTICHECK");
+                    editor.apply();
+                    editor.putString("SELFNOTICHECK", "y");
+
+                }else{
+                    editor.remove("SELFNOTICHECK");
                 }
+                editor.apply();
 
 
             }
@@ -241,9 +281,15 @@ public class NotificationMain extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
                 if (ch2.isChecked()) {
-                 //   setAlarm();
-                }
+                    setAlarm();
+                    editor.remove("TOTOTHERSCH");
+                    editor.apply();
+                    editor.putString("TOTOTHERSCH", "y");
 
+                }else{
+                    editor.remove("TOTOTHERSCH");
+                }
+                editor.apply();
 
             }
         });
@@ -257,8 +303,12 @@ public class NotificationMain extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
         String beforetime = timetext.getText().toString();
         beforetime = beforetime.replace("You will be notified daily at ", "");
-        String hr =  beforetime.split(" : ")[0];
-        String min =  beforetime.split(" : ")[1];
+        int ampm = 0;
+        if(beforetime.contains("pm") && beforetime.split(" : ")[0] != "12"){
+            ampm = 12;
+        }
+        int hr =  Integer.valueOf(beforetime.split(" : ")[0]+ampm);
+        int min =  Integer.valueOf(beforetime.split(" : ")[1].replace("am","").replace("pm",""));
 
         Integer restoredhr = prefs.getInt("MYSELFHR", -1);
         Integer restoredmin = prefs.getInt("MYSELFMIN", -1);
@@ -266,12 +316,12 @@ public class NotificationMain extends AppCompatActivity {
             editor.remove("MYSELFHR");
             editor.remove("MYSELFMIN");
             editor.apply();
-            editor.putInt("MYSELFHR", Integer.valueOf(hr));    //storing sharedpreference
-            editor.putInt("MYSELFMIN", Integer.valueOf(min));  //storing sharedpreference
+            editor.putInt("MYSELFHR", hr);    //storing sharedpreference
+            editor.putInt("MYSELFMIN", min);  //storing sharedpreference
             editor.apply();
         }else{
-            editor.putInt("MYSELFHR", Integer.valueOf(hr));    //storing sharedpreference
-            editor.putInt("MYSELFMIN", Integer.valueOf(min));  //storing sharedpreference
+            editor.putInt("MYSELFHR", hr);    //storing sharedpreference
+            editor.putInt("MYSELFMIN", min);  //storing sharedpreference
             editor.apply();
         }
 
@@ -297,7 +347,7 @@ public class NotificationMain extends AppCompatActivity {
 
     protected ArrayList<String> RetContacts(){
         ArrayList <String> contacts= new ArrayList<String>();
-        Cursor cursor = getContentResolver().query(   ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,null, null);
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
         while (cursor.moveToNext()) {
             String name =cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)) + ": " + (cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("/n","-"));
@@ -309,12 +359,18 @@ public class NotificationMain extends AppCompatActivity {
     }
 
     protected void add_adapter(Set set, Iterator it, OthersAdapter adapter){
-
+        Set dummie = new TreeSet();
+        String contact = "";
         while(it.hasNext()) {
-            String[] parts = ((String) it.next()).split(": ");
-            Others newUser = new Others(parts[0], parts[1], false);
+            contact = (String) it.next();
+            String[] parts = contact.split(": ");
+
+            Others newUser = new Others(parts[0], parts[1], prefs.getBoolean("OTHERSCHECK" + contact, false));
             adapter.add(newUser);
         }
+//        while(seti.hasNext()) {
+//            Toast.makeText(NotificationMain.this, (String)seti.next(), Toast.LENGTH_SHORT).show();
+//        }
     }
 
 }

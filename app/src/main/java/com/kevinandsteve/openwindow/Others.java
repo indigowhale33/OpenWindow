@@ -6,7 +6,7 @@ package com.kevinandsteve.openwindow;
 public class Others {
     public String name;
     public String number;
-    public boolean checked;
+    public boolean checked = false;
     public Others(String name, String number, boolean checked){
         this.name = name;
         this.number = number;

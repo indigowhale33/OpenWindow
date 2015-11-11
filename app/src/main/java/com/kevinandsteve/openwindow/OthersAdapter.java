@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -63,6 +65,7 @@ public class OthersAdapter extends ArrayAdapter<Others> {
         }
         }
 
+
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             // Get the data item for this position
@@ -76,13 +79,13 @@ public class OthersAdapter extends ArrayAdapter<Others> {
                 holder = new ViewHolder();
                 holder.otherName = (TextView) convertView.findViewById(R.id.othersname);
                 holder.otherPhone = (TextView) convertView.findViewById(R.id.otherphone);
-                holder.otherCheck = (CheckBox)convertView.findViewById(R.id.checkothers);
+                holder.otherCheck = (CheckBox) convertView.findViewById(R.id.checkothers);
 
 //                TextView otherName = (TextView) convertView.findViewById(R.id.othersname);
 //                TextView otherPhone = (TextView) convertView.findViewById(R.id.otherphone);
 //                CheckBox otherCheck = (CheckBox) convertView.findViewById(R.id.checkothers);
                 convertView.setTag(holder);
-            }else{
+            } else {
                 holder = (ViewHolder) convertView.getTag();
             }
             // Lookup view for data population
@@ -90,7 +93,17 @@ public class OthersAdapter extends ArrayAdapter<Others> {
 
             holder.otherName.setText(others.getName() + ": ");
             holder.otherPhone.setText(others.getNumber());
-            holder.otherCheck.setChecked(sharedPrefs.getBoolean("CheckValue"+position, false));
+
+//            if(others.getCheck()){
+//                holder.otherCheck.setChecked(true);
+//            }else{
+//                holder.otherCheck.setChecked(false);
+//            }
+            Boolean a = sharedPrefs.getBoolean("OTHERSCHECK" + others.getName() + ": " + others.getNumber(), false);
+            String b = others.getName();
+            holder.otherCheck.setChecked(sharedPrefs.getBoolean("OTHERSCHECK" + others.getName() + ": " + others.getNumber(), false));
+     //       holder.otherCheck.setChecked(false);
+//            holder.otherCheck.setChecked(sharedPrefs.getBoolean("CheckValue"+ others.getName(), false));
 
 //            otherCheck.setTag(Integer.valueOf(position));
 //
@@ -98,39 +111,99 @@ public class OthersAdapter extends ArrayAdapter<Others> {
 //            otherName.setText(others.name + ": ");
 //            otherPhone.setText(others.number);
             // Return the completed view to render on screen
-            holder.otherCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            holder.otherCheck.setOnClickListener(new View.OnClickListener() {
+
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    editor.remove("CheckValue"+position);
-                    editor.putBoolean("CheckValue" + position, isChecked);
-                    editor.commit();
+                public void onClick(View v) {
+                    Others another = getItem(position);
+                    Boolean gotcheck = sharedPrefs.getBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(), false);
+                    if(another.getCheck()){
+                        another.checked = false;
+                        editor.putBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(), false);
+                    }else{
+                        another.checked = true;
+                        editor.putBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(), true);
+                    }
+
+                    editor.apply();
                     Set<String> NameSet = new TreeSet<String>(sharedPrefs.getStringSet("OTHERSNAME", new TreeSet<String>()));
                     Set<String> PhoneSet = new TreeSet<String>(sharedPrefs.getStringSet("OTHERSPHONE", new TreeSet<String>()));
 
-                    if(isChecked){
+                    if (gotcheck) {
                         editor.remove("OTHERSNAME");
                         editor.remove("OTHERSPHONE");
-                        NameSet.add(others.getName());
-                        PhoneSet.add(others.getNumber());
+                        NameSet.add(another.getName());
+                        PhoneSet.add(another.getNumber());
                         editor.apply();
                         editor.putStringSet("OTHERSNAME", NameSet);
-                        editor.putStringSet("OTHERSPHONE",PhoneSet);
-                    }else{
+                        editor.putStringSet("OTHERSPHONE", PhoneSet);
+                    } else {
                         editor.remove("OTHERSNAME");
                         editor.remove("OTHERSPHONE");
-                        NameSet.remove(others.getName());
-                        PhoneSet.remove(others.getNumber());
+                        NameSet.remove(another.getName());
+                        PhoneSet.remove(another.getNumber());
                         editor.apply();
-                        editor.putStringSet("OTHERSNAME",NameSet);
-                        editor.putStringSet("OTHERSPHONE",PhoneSet);
+                        editor.putStringSet("OTHERSNAME", NameSet);
+                        editor.putStringSet("OTHERSPHONE", PhoneSet);
                     }
                     editor.apply();
 
                 }
             });
-            
             return convertView;
         }
+//
+//            holder.otherCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    Set checkset = sharedPrefs.getStringSet("OTHERSCHECK", new TreeSet<String>());
+//                    Others another = getItem(position);
+//
+//
+//                    editor.putBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(), isChecked);
+//                    editor.apply();
+////                    if(isChecked){
+////                        another.checked = true;
+////                        checkset.add(another.getName() + ": " + another.getNumber());
+////                    }else{
+////                        another.checked = false;
+////                        checkset.remove(another.getName() + ": " + another.getNumber());
+////
+////                    }
+////                    editor.remove("OTHERSCHECK");
+////                    editor.apply();
+////                    editor.putStringSet("OTHERSCHECK", checkset);
+//                    editor.apply();
+////                    editor.remove("CheckValue" + others.getName());
+////                    editor.putBoolean("CheckValue" + others.getName(), isChecked);
+////                    editor.apply();
+//                    Set<String> NameSet = new TreeSet<String>(sharedPrefs.getStringSet("OTHERSNAME", new TreeSet<String>()));
+//                    Set<String> PhoneSet = new TreeSet<String>(sharedPrefs.getStringSet("OTHERSPHONE", new TreeSet<String>()));
+//
+//                    if (isChecked) {
+//                        editor.remove("OTHERSNAME");
+//                        editor.remove("OTHERSPHONE");
+//                        NameSet.add(another.getName());
+//                        PhoneSet.add(another.getNumber());
+//                        editor.apply();
+//                        editor.putStringSet("OTHERSNAME", NameSet);
+//                        editor.putStringSet("OTHERSPHONE", PhoneSet);
+//                    } else {
+//                        editor.remove("OTHERSNAME");
+//                        editor.remove("OTHERSPHONE");
+//                        NameSet.remove(another.getName());
+//                        PhoneSet.remove(another.getNumber());
+//                        editor.apply();
+//                        editor.putStringSet("OTHERSNAME", NameSet);
+//                        editor.putStringSet("OTHERSPHONE", PhoneSet);
+//                    }
+//                    editor.apply();
+//
+//                }
+//            });
+//
+//            return convertView;
+//        }
 
     
 }

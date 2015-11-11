@@ -60,9 +60,11 @@ public class beginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_begin);
         Button sendb = (Button) this.findViewById(R.id.sendbut);
-        SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
-        final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
 
+
+        final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
+        //editor.clear();
+        SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content_controls);
 
@@ -77,8 +79,6 @@ public class beginActivity extends Activity {
                 editor.apply();
                 editText.setSelection(editText.getText().length());
                 int message = Integer.parseInt(editText.getText().toString());
-                Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
-                toast.show();
                 intent.putExtra("EXTRA_ZIPCODE", message);
                 startActivity(intent);
             }
@@ -141,7 +141,7 @@ public class beginActivity extends Activity {
         if(prefs.getString("USERZIP", null) != null){
             editText.setText((prefs.getString("USERZIP", null)));
         }
-        editor.clear();
+
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
