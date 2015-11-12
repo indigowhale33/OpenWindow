@@ -94,7 +94,9 @@ public class SelfNotifBack extends Service{
 //                        resp = eElement.getTextContent();
 //                        xmlshow.append(resp);
 //                        xmlshow.append(Integer.toString(nList.getLength()));
-                        String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n" + "Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
+                        String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + " = " +
+                                eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + "Reporting Area : " +
+                                eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
                         if(prefs.getString(MYNOTICH, "") == "y" && intent.getIntExtra("requestCode",-1) == 10 && zip == 0) { // for user itself notification
                             Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
                             Notify("OpenWindow", message);

@@ -58,7 +58,7 @@ public class ResultActivity extends AppCompatActivity {
         }
         String strzip = Integer.toString(zipcode);
         String fDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        final String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + strzip + "&date=" + fDate + "&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
+        final String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + strzip + "&date=" + fDate + "&distance=1000&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
         //String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=23185&date=2015-10-12&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
 //        Toast toast = Toast.makeText(getApplicationContext(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), Toast.LENGTH_SHORT);
 //        toast.show();
