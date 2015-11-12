@@ -9,6 +9,9 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">#FF4081</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="colorControlNormal">#c5e5e5</item>
+        <item name="colorControlActivated">#c5e5e5</item>
+        <item name="colorControlHighlight">#c5e5e5</item>
     </style>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">

@@ -1,6 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#334455"
+    android:layout_height="match_parent" android:background="#234455"
     tools:context=".beginActivity">
 
 
@@ -28,16 +28,22 @@
                 android:src="@drawable/openwindowlogo"
                 android:layout_gravity="center"/>
         <EditText
-            android:layout_width="192dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20px"
+            android:layout_marginBottom="5dp"
             android:id="@+id/ziptext"
             android:inputType="number"
-            android:hint="Enter your Zipcode"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/hint0"
+            android:textColorHint="#fefefe"
             android:gravity="center"
             android:textColor="#fefefe"
             android:layout_gravity="center"
-            android:imeOptions="actionSend"/>
+            android:imeOptions="actionSend"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:background="@drawable/rounded_edittext"/>
 
         <Button
             android:layout_width="200dp"

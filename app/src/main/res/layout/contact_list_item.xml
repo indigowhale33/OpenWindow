@@ -15,12 +15,16 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:layout_weight="0.61"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-light"/>
     <TextView
         android:id="@+id/otherphone"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:layout_marginLeft="10dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="sans-serif-light"
        />
 </LinearLayout>

@@ -99,7 +99,7 @@ public class NotificationMain extends AppCompatActivity {
         if(restoredmin != -1 && restoredhr != -1){  // if no previous time set,
             timetext.setText("Your notification will be at "+restoredhr + " : " + restoredmin);
         }else{
-            timetext.setText("Set Yourself Daily Notification");
+            timetext.setText("Set Your Daily Notification");
         }
 
         if(restore_selfch != "n"){
@@ -112,9 +112,9 @@ public class NotificationMain extends AppCompatActivity {
         String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("People will be notified daily at "+others_hr + " : " + others_min);
+            othertxt.setText("Selected Contacts will be notified daily at "+others_hr + " : " + others_min);
         }else{
-            othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
+            othertxt.setText("Set Time for SMS Notifications");
         }
 
         if(others_ch != "n"){
@@ -198,7 +198,7 @@ public class NotificationMain extends AppCompatActivity {
                     editor.putString(MYNOTICH, "y");
                     editor.apply();
                 } else {
-                    timetext.setText("Set Yourself Daily Notification");
+                    timetext.setText("Set Your Daily Notification");
                     if(!ch2.isChecked()) {
                         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, 0);
@@ -226,7 +226,7 @@ public class NotificationMain extends AppCompatActivity {
 
                     editor.apply();
                 } else {
-                    othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
+                    othertxt.setText("Set Time for SMS Notifications");
                     if(!ch1.isChecked()) {
                         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, 0);
@@ -313,7 +313,7 @@ public class NotificationMain extends AppCompatActivity {
             beforetime = beforetime.replace("You will be notified daily at ", "");
         }else if(ch == "ch2"){
             beforetime = othertxt.getText().toString();
-            beforetime = beforetime.replace("People will be notified daily at ", "");
+            beforetime = beforetime.replace("Selected contacts will be notified daily at ", "");
         }
         int ampm = 0;
         if(beforetime.contains("pm") && beforetime.split(" : ")[0] != "12"){
