@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -97,11 +96,11 @@ public class SelfNotifBack extends Service{
                         String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + " : " +
                                 eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + " From: " +
                                 eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
-                        if(prefs.getString(MYNOTICH, "") == "y" && intent.getIntExtra("requestCode",-1) == 10 && zip == 0) { // for user itself notification
+                        if(prefs.getString(MYNOTICH, "") == "y" && (intent.getIntExtra("requestCode",-1) == 10) && zip == 0) { // for user itself notification
                             Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
                             Notify("OpenWindow", message);
                         }
-                        if(prefs.getString(OTHERSNOTICH, "") == "y"  && intent.getIntExtra("requestCode",-1) == 21 && zip == 0) {  //for sending others
+                        if(prefs.getString(OTHERSNOTICH, "") == "y"  && (intent.getIntExtra("requestCode",-1) == 21) && zip == 0) {  //for sending others
                             //Toast.makeText(SelfNotifBack.this, "OTHERNOTI", Toast.LENGTH_SHORT).show();
                             Iterator testit = prefs.getStringSet("SENDLIST", new TreeSet<String>()).iterator();
                             String elem = "";

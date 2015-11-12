@@ -200,11 +200,10 @@ public class NotificationMain extends AppCompatActivity {
                     editor.apply();
                 } else {
                     timetext.setText("Set Your Daily Notification");
-                    if(!ch2.isChecked()) {
-                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, 0);
-                        manager.cancel(pendingIntent);
-                    }
+                    AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, 0);
+                    manager.cancel(pendingIntent);
+
                     editor.remove(MYNOTICH);
                     editor.remove(MYNOTIHR);
                     editor.remove(MYNOTIMIN);
@@ -229,11 +228,10 @@ public class NotificationMain extends AppCompatActivity {
                     editor.apply();
                 } else {
                     othertxt.setText("Set Time for SMS Notifications");
-                    if(!ch1.isChecked()) {
-                        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                        pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, 0);
-                        manager.cancel(pendingIntent);
-                    }
+                    AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                    pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, 0);
+                    manager.cancel(pendingIntent);
+
                     editor.remove(OTHERSNOTICH);
                     editor.remove(OTHERSHR);
                     editor.remove(OTHERSMIN);
