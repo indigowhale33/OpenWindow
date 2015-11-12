@@ -58,7 +58,7 @@ public class SelfNotifBack extends Service{
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        if(restore_selfch != "n" | restore_otherch != "n" && zipcode != null){
+        if((restore_selfch != "n" | restore_otherch != "n") && zipcode != null){
             String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + zipcode + "&date=" + fDate + "&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
 
             try {

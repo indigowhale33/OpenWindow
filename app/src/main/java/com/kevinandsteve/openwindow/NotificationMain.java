@@ -112,7 +112,7 @@ public class NotificationMain extends AppCompatActivity {
         String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("Selected Contacts will be notified daily at "+others_hr + " : " + others_min);
+            othertxt.setText("People will be notified daily at "+others_hr + " : " + others_min);
         }else{
             othertxt.setText("Set Time for SMS Notifications");
         }
@@ -122,7 +122,7 @@ public class NotificationMain extends AppCompatActivity {
         }
 
         /* Retrieve a PendingIntent that will perform a broadcast */
-        final Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
+
 
 
         addbutt.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +188,7 @@ public class NotificationMain extends AppCompatActivity {
         ch1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
                 if (ch1.isChecked()) {
                     DialogFragment newFragment = new TimePickerFragment();
                     newFragment.show(getFragmentManager(), "TimePicker");
@@ -215,6 +216,7 @@ public class NotificationMain extends AppCompatActivity {
         ch2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
                 if (ch2.isChecked()) {
                     DialogFragment newFragment = new TimeOtherFragment();
                     newFragment.show(getFragmentManager(), "TimePicker");
@@ -313,14 +315,18 @@ public class NotificationMain extends AppCompatActivity {
             beforetime = beforetime.replace("You will be notified daily at ", "");
         }else if(ch == "ch2"){
             beforetime = othertxt.getText().toString();
-            beforetime = beforetime.replace("Selected contacts will be notified daily at ", "");
+            beforetime = beforetime.replace("People will be notified daily at ", "");
         }
         int ampm = 0;
         if(beforetime.contains("pm") && beforetime.split(" : ")[0] != "12"){
             ampm = 12;
         }
-        String a = beforetime.split(" : ")[0];
-        int hr =  Integer.valueOf(beforetime.split(" : ")[0])+ampm;
+        int hr = Integer.valueOf(beforetime.split(" : ")[0]);
+        if(hr == 12 && ampm == 12){  //if 12pm,
+            hr = 12;
+        }else {
+            hr = Integer.valueOf(beforetime.split(" : ")[0]) + ampm;
+        }
         int min =  Integer.valueOf(beforetime.split(" : ")[1].replace("am","").replace("pm",""));
         Integer restoredhr = -1;
         Integer restoredmin = -1;
