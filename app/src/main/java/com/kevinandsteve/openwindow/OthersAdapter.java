@@ -120,9 +120,27 @@ public class OthersAdapter extends ArrayAdapter<Others> {
                     if(another.getCheck()){
                         another.checked = false;
                         editor.putBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(), false);
+                        editor.apply();
+                        if(!sharedPrefs.getBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(),false)){
+                            Set sendset = sharedPrefs.getStringSet("SENDLIST", new TreeSet<String>());
+                            sendset.remove(another.getName() + ": " + another.getNumber());
+                            editor.remove("SENDLIST");
+                            editor.apply();
+                            editor.putStringSet("SENDLIST", sendset);
+                            editor.apply();
+                        }
                     }else{
                         another.checked = true;
                         editor.putBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(), true);
+                        editor.apply();
+                        if(sharedPrefs.getBoolean("OTHERSCHECK" + another.getName() + ": " + another.getNumber(),false)){
+                            Set sendset = sharedPrefs.getStringSet("SENDLIST", new TreeSet<String>());
+                            sendset.add(another.getName() + ": " + another.getNumber());
+                            editor.remove("SENDLIST");
+                            editor.apply();
+                            editor.putStringSet("SENDLIST", sendset);
+                            editor.apply();
+                        }
                     }
 
                     editor.apply();

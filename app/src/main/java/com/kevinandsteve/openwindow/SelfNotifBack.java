@@ -80,7 +80,7 @@ public class SelfNotifBack extends Service{
                 doc.getDocumentElement().normalize();
                 NodeList nList = doc.getElementsByTagName("ForecastByZip");
                 if (nList.getLength() != 0) {
-                    for (int zip = 0; zip < nList.getLength(); zip++) {
+                    for (int zip = 0; zip < 1; zip++) { // nList.getLength() <- use for multiple days
                         Node nNode = nList.item(zip);
                         Element eElement = (Element) nNode;
                         //Toast.makeText(SelfNotifBack.this, "DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent(), Toast.LENGTH_SHORT).show();
@@ -94,15 +94,20 @@ public class SelfNotifBack extends Service{
 //                        resp = eElement.getTextContent();
 //                        xmlshow.append(resp);
 //                        xmlshow.append(Integer.toString(nList.getLength()));
-                        String message = "AQI : " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n" + "Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
-                        if(prefs.getString(MYNOTICH, "") == "y") {
+                        String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n" + "Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
+                        if(prefs.getString(MYNOTICH, "") == "y" && intent.getIntExtra("requestCode",-1) == 10 && zip == 0) { // for user itself notification
                             Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
-                            Notify("OpenWindow", "DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent());
-                        }
-                        if(prefs.getString(OTHERSNOTICH, "") == "y") {
-                            Toast.makeText(SelfNotifBack.this, "OTHERNOTI", Toast.LENGTH_SHORT).show();
-                            Iterator testit = prefs.getStringSet("OTHERSPHONE", new TreeSet<String>()).iterator();
-                            sendSMSMessage(testit, message);
+                            Notify("OpenWindow", message);
+                        }else if(prefs.getString(OTHERSNOTICH, "") == "y"  && intent.getIntExtra("requestCode",-1) == 21 && zip == 0) {  //for sending others
+                            //Toast.makeText(SelfNotifBack.this, "OTHERNOTI", Toast.LENGTH_SHORT).show();
+                            Iterator testit = prefs.getStringSet("SENDLIST", new TreeSet<String>()).iterator();
+                            String elem = "";
+                            Set contactSet = new TreeSet();
+                            while(testit.hasNext()){
+                                elem = (String) testit.next();
+                                contactSet.add(elem.split(": ")[1].replaceAll("[-(): ]", ""));
+                            }
+                            sendSMSMessage(contactSet.iterator(), message);
                         }
 
                     }

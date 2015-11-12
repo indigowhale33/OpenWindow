@@ -224,7 +224,6 @@ public class NotificationMain extends AppCompatActivity {
                     editor.putString(OTHERSNOTICH, "y");
 
                     editor.apply();
-                    String hi = prefs.getString(OTHERSNOTICH,"0");
                 } else {
                     othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
                     if(!ch1.isChecked()) {
@@ -358,8 +357,16 @@ public class NotificationMain extends AppCompatActivity {
 
          /* Retrieve a PendingIntent that will perform a broadcast */
         Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, alarmIntent, 0);
+        if(ch == "ch1") {
+            alarmIntent.putExtra("requestCode",10);
+            //pendingIntent = PendingIntent.getActivity(getBaseContext(), 10, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
+            pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }else {
+            alarmIntent.putExtra("requestCode",21);
+            //pendingIntent = PendingIntent.getActivity(getBaseContext(), 21, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         int interval = 1000 * 60 * 20;
 

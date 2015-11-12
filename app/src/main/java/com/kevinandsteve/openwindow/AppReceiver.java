@@ -15,8 +15,11 @@ public class AppReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
 
         Toast.makeText(context, "I'm running", Toast.LENGTH_SHORT).show();
-        intent = new Intent(context, SelfNotifBack.class);
-        context.startService(intent);
+
+        Intent newintent = new Intent(context, SelfNotifBack.class);
+        newintent.putExtra("requestCode", intent.getIntExtra("requestCode", -1));
+       // intent.putExtra("requestCode",intent.getExtras().getSerializable("requestCode"));
+        context.startService(newintent);
 //        Intent startIntent = new Intent(context, SelfNotifBack.class);
 //        startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        context.startActivity(startIntent);
