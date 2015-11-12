@@ -122,8 +122,8 @@ public class NotificationMain extends AppCompatActivity {
         }
 
         /* Retrieve a PendingIntent that will perform a broadcast */
-        Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, alarmIntent, 0);
+        final Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
+
 
         addbutt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +201,7 @@ public class NotificationMain extends AppCompatActivity {
                     timetext.setText("Set Yourself Daily Notification");
                     if(!ch2.isChecked()) {
                         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, 0);
                         manager.cancel(pendingIntent);
                     }
                     editor.remove(MYNOTICH);
@@ -228,6 +229,7 @@ public class NotificationMain extends AppCompatActivity {
                     othertxt.setText("Set Others' Daily Notification(SMS will be sent!)");
                     if(!ch1.isChecked()) {
                         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, 0);
                         manager.cancel(pendingIntent);
                     }
                     editor.remove(OTHERSNOTICH);
@@ -361,11 +363,11 @@ public class NotificationMain extends AppCompatActivity {
             alarmIntent.putExtra("requestCode",10);
             //pendingIntent = PendingIntent.getActivity(getBaseContext(), 10, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, 0);
         }else {
             alarmIntent.putExtra("requestCode",21);
             //pendingIntent = PendingIntent.getActivity(getBaseContext(), 21, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, 0);
         }
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         int interval = 1000 * 60 * 20;

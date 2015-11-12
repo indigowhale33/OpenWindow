@@ -54,7 +54,7 @@ public class SelfNotifBack extends Service{
         String restore_selfch = prefs.getString(MYNOTICH, "n");
         String restore_otherch = prefs.getString(OTHERSNOTICH, "n");// to make sure
         String zipcode = prefs.getString("USERZIP", null);   // retrieve zipcode
-        Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -94,13 +94,14 @@ public class SelfNotifBack extends Service{
 //                        resp = eElement.getTextContent();
 //                        xmlshow.append(resp);
 //                        xmlshow.append(Integer.toString(nList.getLength()));
-                        String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + " = " +
-                                eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + "Reporting Area : " +
+                        String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + " : " +
+                                eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + " From: " +
                                 eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
                         if(prefs.getString(MYNOTICH, "") == "y" && intent.getIntExtra("requestCode",-1) == 10 && zip == 0) { // for user itself notification
                             Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
                             Notify("OpenWindow", message);
-                        }else if(prefs.getString(OTHERSNOTICH, "") == "y"  && intent.getIntExtra("requestCode",-1) == 21 && zip == 0) {  //for sending others
+                        }
+                        if(prefs.getString(OTHERSNOTICH, "") == "y"  && intent.getIntExtra("requestCode",-1) == 21 && zip == 0) {  //for sending others
                             //Toast.makeText(SelfNotifBack.this, "OTHERNOTI", Toast.LENGTH_SHORT).show();
                             Iterator testit = prefs.getStringSet("SENDLIST", new TreeSet<String>()).iterator();
                             String elem = "";
