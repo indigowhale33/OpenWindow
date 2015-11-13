@@ -85,7 +85,7 @@ public class ResultActivity extends AppCompatActivity {
         thezip.setText(strzip);
         String fDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-        final String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + strzip + "&date=" + fDate + "&distance=1000&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
+        final String strurl = "http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/xml&zipCode=" + strzip + "&distance=120&API_KEY=4D57B8FF-A70B-44EE-948E-B4100173F3FA";
 
 
         //String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=23185&date=2015-10-12&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
@@ -192,7 +192,7 @@ public class ResultActivity extends AppCompatActivity {
                 for (int zip = 0; zip < nList.getLength(); zip++) {
                     Node nNode = nList.item(zip);
                     Element eElement = (Element) nNode;
-                    xmlshow.append("DateIssue : " + eElement.getElementsByTagName("DateObserved").item(0).getTextContent() + "\n");
+                    //xmlshow.append("DateIssue : " + eElement.getElementsByTagName("DateObserved").item(0).getTextContent() + "\n");
 //                    xmlshow.append("DateForecast : " + eElement.getElementsByTagName("Date").item(0).getTextContent() + "\n");
                     xmlshow.append("Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n");
                     xmlshow.append("Parameter Name : " + eElement.getElementsByTagName("ParameterName").item(0).getTextContent() + "\n");
