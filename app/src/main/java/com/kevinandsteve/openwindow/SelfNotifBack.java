@@ -58,7 +58,8 @@ public class SelfNotifBack extends Service{
         StrictMode.setThreadPolicy(policy);
 
         if((restore_selfch != "n" | restore_otherch != "n") && zipcode != null){
-            String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + zipcode + "&date=" + fDate + "&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
+            String strurl = "http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/xml&zipCode="+ zipcode + "&date=" + fDate + "&distance=1000&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
+            //String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + zipcode + "&date=" + fDate + "&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
 
             try {
                 xmlresponse = ResultActivity.sendGet(strurl);
@@ -77,7 +78,7 @@ public class SelfNotifBack extends Service{
                 builder = factory.newDocumentBuilder();
                 Document doc = builder.parse(new InputSource(new StringReader(xmlresponse)));
                 doc.getDocumentElement().normalize();
-                NodeList nList = doc.getElementsByTagName("ForecastByZip");
+                NodeList nList = doc.getElementsByTagName("ObsByZipList");
                 if (nList.getLength() != 0) {
                     for (int zip = 0; zip < 1; zip++) { // nList.getLength() <- use for multiple days
                         Node nNode = nList.item(zip);

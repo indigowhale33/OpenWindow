@@ -58,7 +58,8 @@ public class ResultActivity extends AppCompatActivity {
         }
         String strzip = Integer.toString(zipcode);
         String fDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        final String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + strzip + "&date=" + fDate + "&distance=1000&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
+        final String strurl = "http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/xml&zipCode="+ strzip + "&date=" + fDate + "&distance=1000&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
+       // final String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=" + strzip + "&date=" + fDate + "&distance=1000&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
         //String strurl = "http://www.airnowapi.org/aq/forecast/zipCode/?format=application/xml&zipCode=23185&date=2015-10-12&distance=20&API_KEY=89073F7F-3417-4795-B2CE-D9CF7FA83279";
 //        Toast toast = Toast.makeText(getApplicationContext(), Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), Toast.LENGTH_SHORT);
 //        toast.show();
@@ -152,19 +153,19 @@ public class ResultActivity extends AppCompatActivity {
             builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(xmlresponse)));
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("ForecastByZip");
+            NodeList nList = doc.getElementsByTagName("ObsByZipList");
             if (nList.getLength() != 0) {
                 for (int zip = 0; zip < nList.getLength(); zip++) {
                     Node nNode = nList.item(zip);
                     Element eElement = (Element) nNode;
-                    xmlshow.append("DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent() + "\n");
-                    xmlshow.append("DateForecast : " + eElement.getElementsByTagName("DateForecast").item(0).getTextContent() + "\n");
+                    xmlshow.append("DateIssue : " + eElement.getElementsByTagName("DateObserved").item(0).getTextContent() + "\n");
+//                    xmlshow.append("DateForecast : " + eElement.getElementsByTagName("Date").item(0).getTextContent() + "\n");
                     xmlshow.append("Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n");
                     xmlshow.append("Parameter Name : " + eElement.getElementsByTagName("ParameterName").item(0).getTextContent() + "\n");
                     xmlshow.append("AQI : " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n");
                     xmlshow.append("CategoryNumber : " + eElement.getElementsByTagName("CategoryNumber").item(0).getTextContent() + "\n");
                     xmlshow.append("CategoryName : " + eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + "\n");
-                    xmlshow.append("Actionday : " + eElement.getElementsByTagName("ActionDay").item(0).getTextContent() + "\n");
+//                    xmlshow.append("Actionday : " + eElement.getElementsByTagName("ActionDay").item(0).getTextContent() + "\n");
                     resp = eElement.getTextContent();
                     xmlshow.append(resp);
                     xmlshow.append(Integer.toString(nList.getLength()));
