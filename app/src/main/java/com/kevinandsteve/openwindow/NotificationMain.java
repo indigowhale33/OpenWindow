@@ -97,9 +97,10 @@ public class NotificationMain extends AppCompatActivity {
         String restore_selfch = prefs.getString(MYNOTICH,"n");
 
         if(restoredmin != -1 && restoredhr != -1){  // if no previous time set,
-            timetext.setText("Your notification will be at "+restoredhr + " : " + restoredmin);
+            timetext.setText("Your notification will be at "+restoredhr + ":" + restoredmin);
         }else{
             timetext.setText("Set Your Daily Notification");
+            ch1.setChecked(false);
         }
 
         if(restore_selfch != "n"){
@@ -112,9 +113,10 @@ public class NotificationMain extends AppCompatActivity {
         String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("People will be notified daily at "+others_hr + " : " + others_min);
+            othertxt.setText("People will be notified daily at "+others_hr + ":" + others_min);
         }else{
             othertxt.setText("Set Time for SMS Notifications");
+            ch2.setChecked(false);
         }
 
         if(others_ch != "n"){
