@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.telephony.SmsManager;
@@ -45,7 +47,7 @@ public class SelfNotifBack extends Service{
     SharedPreferences.Editor editor;
     private static String xmlresponse;
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, int flags, int startId) {
         //super.onCreate(savedInstanceState);
         prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
@@ -87,13 +89,24 @@ public class SelfNotifBack extends Service{
                         String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + " : " +
                                 eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + " From: " +
                                 eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
-                        int a = intent.getIntExtra("requestCode",-1);
-                        if(prefs.getString(MYNOTICH, "") == "y" && (intent.getIntExtra("requestCode",-1) == 10) && zip == 0) { // for user itself notification
-                            Toast.makeText(SelfNotifBack.this, "SELFNOTI", Toast.LENGTH_SHORT).show();
+
+//                        Handler handler = new Handler(Looper.getMainLooper());
+//
+//                        handler.post(new Runnable() {
+//
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(SelfNotifBack.this.getApplicationContext(),String.valueOf(intent.getIntExtra("requestCode",-1)) + "and" + prefs.getString(MYNOTICH, ""),Toast.LENGTH_LONG).show();
+//                            }
+//                        });
+
+
+                        if(prefs.getString(MYNOTICH, "") == "y" && (intent.getIntExtra("requestCode",-1) == 10)) { // for user itself notification
+
                             Notify("OpenWindow", message);
                         }
-                        if(prefs.getString(OTHERSNOTICH, "") == "y"  && (intent.getIntExtra("requestCode",-1) == 21) && zip == 0) {  //for sending others
-                            //Toast.makeText(SelfNotifBack.this, "OTHERNOTI", Toast.LENGTH_SHORT).show();
+                        if(prefs.getString(OTHERSNOTICH, "") == "y"  && (intent.getIntExtra("requestCode",-1) == 21)) {  //for sending others
+
                             Iterator testit = prefs.getStringSet("SENDLIST", new TreeSet<String>()).iterator();
                             String elem = "";
                             Set contactSet = new TreeSet();
@@ -149,7 +162,7 @@ public class SelfNotifBack extends Service{
             try {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(contact, null, message, null, null);
-                Toast.makeText(getApplicationContext(), "SMS sent."+contact, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "SMS sent."+contact, Toast.LENGTH_SHORT).show();
             }
 
             catch (Exception e) {

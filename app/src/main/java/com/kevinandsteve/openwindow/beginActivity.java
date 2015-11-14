@@ -87,7 +87,7 @@ public class beginActivity extends Activity implements LocationListener {
         }
         else {
 
-            //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
 
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
@@ -197,8 +197,8 @@ public class beginActivity extends Activity implements LocationListener {
                     // editor.apply();
                     editText.setSelection(editText.getText().length());
                     int message = Integer.parseInt(editText.getText().toString());
-                    Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
-                    toast.show();
+//                    Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
+//                    toast.show();
                     intent.putExtra("EXTRA_ZIPCODE", message);
                     editor.remove("USERZIP");
                     editor.apply();
