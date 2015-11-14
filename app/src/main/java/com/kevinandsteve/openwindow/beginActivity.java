@@ -16,7 +16,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -73,7 +75,11 @@ public class beginActivity extends Activity implements LocationListener {
         Button sendb = (Button) this.findViewById(R.id.sendbut);
         EditText zipEnter = (EditText) this.findViewById(R.id.ziptext);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+        );
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); imm.hideSoftInputFromWindow(zipEnter.getWindowToken(), 0);
         Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if(location != null ) {
             // Do something with the recent location fix
@@ -81,7 +87,7 @@ public class beginActivity extends Activity implements LocationListener {
         }
         else {
 
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
 
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
@@ -173,7 +179,7 @@ public class beginActivity extends Activity implements LocationListener {
                 boolean handled = false;
 
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-
+                    editText.clearFocus();
                     Thread thread = new Thread(new Runnable(){
                         @Override
                         public void run(){
@@ -188,7 +194,7 @@ public class beginActivity extends Activity implements LocationListener {
                     //editor.remove("USERZIP");
                     //editor.apply();
                     //editor.putString("USERZIP", editText.getText().toString());  //store zipcode
-                   // editor.apply();
+                    // editor.apply();
                     editText.setSelection(editText.getText().length());
                     int message = Integer.parseInt(editText.getText().toString());
                     Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
