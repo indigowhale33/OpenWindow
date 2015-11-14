@@ -1,11 +1,18 @@
 package com.kevinandsteve.openwindow;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,14 +24,18 @@ import android.widget.Toast;
 
 import com.kevinandsteve.openwindow.util.SystemUiHider;
 
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  *
  * @see SystemUiHider
  */
-public class beginActivity extends Activity {
-
+public class beginActivity extends Activity implements LocationListener {
+    LocationManager mLocationManager;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -60,7 +71,17 @@ public class beginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_begin);
         Button sendb = (Button) this.findViewById(R.id.sendbut);
+        EditText zipEnter = (EditText) this.findViewById(R.id.ziptext);
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+            // Do something with the recent location fix
+            zipEnter.setText(getZipCodeFromLocation(location));
+        }
+        else {
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        }
 
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
         //editor.clear();
@@ -73,10 +94,10 @@ public class beginActivity extends Activity {
 
                 Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                 EditText editText = (EditText) findViewById(R.id.ziptext);
-                editor.remove("USERZIP");
-                editor.apply();
-                editor.putString("USERZIP", editText.getText().toString());  //store zipcode
-                editor.apply();
+                //editor.remove("USERZIP");
+                //editor.apply();
+                //editor.putString("USERZIP", editText.getText().toString());  //store zipcode
+                //editor.apply();
                 editText.setSelection(editText.getText().length());
                 int message = Integer.parseInt(editText.getText().toString());
                 intent.putExtra("EXTRA_ZIPCODE", message);
@@ -139,7 +160,7 @@ public class beginActivity extends Activity {
 
         final EditText editText = (EditText) findViewById(R.id.ziptext);
         if(prefs.getString("USERZIP", null) != null){
-            editText.setText((prefs.getString("USERZIP", null)));
+            //editText.setText((prefs.getString("USERZIP", null)));
         }
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -160,10 +181,10 @@ public class beginActivity extends Activity {
                     handled = true;
                     Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                     EditText editText = (EditText) findViewById(R.id.ziptext);
-                    editor.remove("USERZIP");
-                    editor.apply();
-                    editor.putString("USERZIP", editText.getText().toString());  //store zipcode
-                    editor.apply();
+                    //editor.remove("USERZIP");
+                    //editor.apply();
+                    //editor.putString("USERZIP", editText.getText().toString());  //store zipcode
+                   // editor.apply();
                     editText.setSelection(editText.getText().length());
                     int message = Integer.parseInt(editText.getText().toString());
                     Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
@@ -179,7 +200,17 @@ public class beginActivity extends Activity {
 
     }
 
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            Log.v("Location Changed", location.getLatitude() + " and " + location.getLongitude());
+            mLocationManager.removeUpdates(this);
+        }
+    }
 
+    // Required functions
+    public void onProviderDisabled(String arg0) {}
+    public void onProviderEnabled(String arg0) {}
+    public void onStatusChanged(String arg0, int arg1, Bundle arg2) {}
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -222,5 +253,24 @@ public class beginActivity extends Activity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    private String getZipCodeFromLocation(Location location) {
+        Address addr = getAddressFromLocation(location);
+        return addr.getPostalCode() == null ? "" : addr.getPostalCode();
+    }
+
+    private Address getAddressFromLocation(Location location) {
+        Geocoder geocoder = new Geocoder(this);
+        Address address = new Address(Locale.getDefault());
+        try {
+            List<Address> addr = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (addr.size() > 0) {
+                address = addr.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 }
