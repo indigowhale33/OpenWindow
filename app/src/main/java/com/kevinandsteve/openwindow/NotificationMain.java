@@ -264,7 +264,7 @@ public class NotificationMain extends AppCompatActivity {
                     editor.apply();
                     editor.putString("SELFNOTICHECK", "y");
 
-                }else{
+                } else {
                     editor.remove("SELFNOTICHECK");
                 }
                 editor.apply();
@@ -294,7 +294,7 @@ public class NotificationMain extends AppCompatActivity {
                     editor.apply();
                     editor.putString("TOTOTHERSCH", "y");
 
-                }else{
+                } else {
                     editor.remove("TOTOTHERSCH");
                 }
                 editor.apply();
@@ -365,12 +365,16 @@ public class NotificationMain extends AppCompatActivity {
 
          /* Retrieve a PendingIntent that will perform a broadcast */
         Intent alarmIntent = new Intent(getBaseContext(), AppReceiver.class);
+
         if(ch == "ch1") {
+            alarmIntent.setAction("Selfnoti");
             alarmIntent.putExtra("requestCode",10);
             //pendingIntent = PendingIntent.getActivity(getBaseContext(), 10, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 10, alarmIntent, 0);
+
         }else {
+            alarmIntent.setAction("Othernoti");
             alarmIntent.putExtra("requestCode",21);
             //pendingIntent = PendingIntent.getActivity(getBaseContext(), 21, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             pendingIntent = PendingIntent.getBroadcast(getBaseContext(), 21, alarmIntent, 0);
@@ -404,7 +408,6 @@ public class NotificationMain extends AppCompatActivity {
     }
 
     protected void add_adapter(Set set, Iterator it, OthersAdapter adapter){
-        Set dummie = new TreeSet();
         String contact = "";
         while(it.hasNext()) {
             contact = (String) it.next();
