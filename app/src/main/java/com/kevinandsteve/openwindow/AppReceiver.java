@@ -17,7 +17,6 @@ public class AppReceiver extends BroadcastReceiver{
         Toast.makeText(context, "I'm running", Toast.LENGTH_SHORT).show();
 
         Intent newintent = new Intent(context, SelfNotifBack.class);
-        int a = intent.getIntExtra("requestCode", -1);
         newintent.putExtra("requestCode", intent.getIntExtra("requestCode", -1));
        // intent.putExtra("requestCode",intent.getExtras().getSerializable("requestCode"));
         context.startService(newintent);

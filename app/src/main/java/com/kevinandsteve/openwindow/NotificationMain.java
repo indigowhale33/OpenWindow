@@ -113,7 +113,7 @@ public class NotificationMain extends AppCompatActivity {
         String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("People will be notified daily at "+others_hr + ":" + others_min);
+            othertxt.setText("Contacts will be notified daily at "+others_hr + ":" + others_min);
         }else{
             othertxt.setText("Set Time for SMS Notifications");
             ch2.setChecked(false);
@@ -315,7 +315,7 @@ public class NotificationMain extends AppCompatActivity {
             beforetime = beforetime.replace("You will be notified daily at ", "");
         }else if(ch == "ch2"){
             beforetime = othertxt.getText().toString();
-            beforetime = beforetime.replace("People will be notified daily at ", "");
+            beforetime = beforetime.replace("Contacts will be notified daily at ", "");
         }
         int ampm = 0;
         if(beforetime.contains("pm") && beforetime.split(" : ")[0] != "12"){

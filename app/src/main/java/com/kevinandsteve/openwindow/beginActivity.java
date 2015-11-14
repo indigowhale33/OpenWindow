@@ -80,10 +80,12 @@ public class beginActivity extends Activity implements LocationListener {
             zipEnter.setText(getZipCodeFromLocation(location));
         }
         else {
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
+            //mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
 
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
+
         //editor.clear();
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -100,6 +102,10 @@ public class beginActivity extends Activity implements LocationListener {
                 //editor.apply();
                 editText.setSelection(editText.getText().length());
                 int message = Integer.parseInt(editText.getText().toString());
+                editor.remove("USERZIPP");
+                editor.apply();
+                editor.putInt("USERZIPP", message);
+                editor.apply();
                 intent.putExtra("EXTRA_ZIPCODE", message);
                 startActivity(intent);
             }
