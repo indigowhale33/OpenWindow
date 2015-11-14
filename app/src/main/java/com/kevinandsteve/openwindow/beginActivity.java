@@ -81,7 +81,7 @@ public class beginActivity extends Activity implements LocationListener {
         }
         else {
 
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
 
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
@@ -96,10 +96,6 @@ public class beginActivity extends Activity implements LocationListener {
 
                 Intent intent = new Intent(getBaseContext(), ResultActivity.class);
                 EditText editText = (EditText) findViewById(R.id.ziptext);
-                //editor.remove("USERZIP");
-                //editor.apply();
-                //editor.putString("USERZIP", editText.getText().toString());  //store zipcode
-                //editor.apply();
                 editText.setSelection(editText.getText().length());
                 int message = Integer.parseInt(editText.getText().toString());
                 editor.remove("USERZIPP");
@@ -110,6 +106,7 @@ public class beginActivity extends Activity implements LocationListener {
                 startActivity(intent);
             }
         });
+
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
