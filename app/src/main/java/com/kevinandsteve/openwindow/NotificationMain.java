@@ -35,9 +35,11 @@ public class NotificationMain extends AppCompatActivity {
     String OTHERSHR = "OTHERSHR";
     String OTHERSMIN = "OTHERSMIN";
     String OTHERSNOTICH = "OTHERSNOTICH";
+    String OTHERNOTIAPM = "OTHERNOTIAPM";
     String MYNOTIHR = "MYNOTIHR";
     String MYNOTIMIN = "MYNOTIMIN";
     String MYNOTICH = "MYNOTICH";
+    String MYNOTIAPM = "MYNOTIAPM";
 
 
     CheckBox ch1, ch2;
@@ -94,10 +96,11 @@ public class NotificationMain extends AppCompatActivity {
         //Toast.makeText(NotificationMain.this, ((TextView)findViewById(R.id.othersname)).getText(), Toast.LENGTH_SHORT).show();
         Integer restoredhr = prefs.getInt(MYNOTIHR, -1);
         Integer restoredmin = prefs.getInt(MYNOTIMIN, -1);
+        String restoredapm = prefs.getString(MYNOTIAPM, "");
         String restore_selfch = prefs.getString(MYNOTICH,"n");
 
         if(restoredmin != -1 && restoredhr != -1){  // if no previous time set,
-            timetext.setText("Your notification will be at "+restoredhr + ":" + restoredmin);
+            timetext.setText("Your notification will be at "+restoredhr + ":" + restoredmin + restoredapm);
         }else{
             timetext.setText("Set Your Daily Notification");
             ch1.setChecked(false);
@@ -110,10 +113,11 @@ public class NotificationMain extends AppCompatActivity {
 
         Integer others_hr = prefs.getInt(OTHERSHR, -1);      // other's notification hour
         Integer others_min = prefs.getInt(OTHERSMIN, -1);    // other's notification min
+        String others_apm = prefs.getString(OTHERNOTIAPM, "");
         String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("Contacts will be notified daily at "+others_hr + ":" + others_min);
+            othertxt.setText("Contacts will receive a daily SMS alert at "+others_hr + ":" + others_min + others_apm);
         }else{
             othertxt.setText("Set Time for SMS Notifications");
             ch2.setChecked(false);
@@ -196,6 +200,7 @@ public class NotificationMain extends AppCompatActivity {
                     newFragment.show(getFragmentManager(), "TimePicker");
                     editor.remove(MYNOTIHR);
                     editor.remove(MYNOTIMIN);
+                    editor.remove(MYNOTIAPM);
                     editor.remove(MYNOTICH);
                     editor.apply();
                     editor.putString(MYNOTICH, "y");
@@ -224,6 +229,7 @@ public class NotificationMain extends AppCompatActivity {
                     editor.remove(OTHERSHR);
                     editor.remove(OTHERSMIN);
                     editor.remove(OTHERSNOTICH);
+                    editor.remove(OTHERNOTIAPM);
                     editor.apply();
                     editor.putString(OTHERSNOTICH, "y");
 
@@ -310,23 +316,21 @@ public class NotificationMain extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(OWPREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();
         String beforetime ="";
+        String apm = "am";
         if(ch == "ch1") {
             beforetime = timetext.getText().toString();
             beforetime = beforetime.replace("You will be notified daily at ", "");
         }else if(ch == "ch2"){
             beforetime = othertxt.getText().toString();
-            beforetime = beforetime.replace("Contacts will be notified daily at ", "");
+            beforetime = beforetime.replace("Contacts will receive a daily SMS alert at ", "");
         }
         int ampm = 0;
         if(beforetime.contains("pm") && beforetime.split(" : ")[0] != "12"){
             ampm = 12;
+            apm = "pm";
         }
         int hr = Integer.valueOf(beforetime.split(" : ")[0]);
-        if(hr == 12 && ampm == 12){  //if 12pm,
-            hr = 12;
-        }else {
-            hr = Integer.valueOf(beforetime.split(" : ")[0]) + ampm;
-        }
+
         int min =  Integer.valueOf(beforetime.split(" : ")[1].replace("am","").replace("pm",""));
         Integer restoredhr = -1;
         Integer restoredmin = -1;
@@ -339,10 +343,12 @@ public class NotificationMain extends AppCompatActivity {
                 editor.apply();
                 editor.putInt(MYNOTIHR, hr);    //storing sharedpreference
                 editor.putInt(MYNOTIMIN, min);  //storing sharedpreference
+                editor.putString(MYNOTIAPM, apm);
                 editor.apply();
             } else {
                 editor.putInt(MYNOTIHR, hr);    //storing sharedpreference
                 editor.putInt(MYNOTIMIN, min);  //storing sharedpreference
+                editor.putString(MYNOTIAPM, apm);
                 editor.apply();
             }
         }else if(ch == "ch2"){
@@ -354,12 +360,20 @@ public class NotificationMain extends AppCompatActivity {
                 editor.apply();
                 editor.putInt(OTHERSHR, hr);    //storing sharedpreference
                 editor.putInt(OTHERSMIN, min);  //storing sharedpreference
+                editor.putString(OTHERNOTIAPM, apm);
                 editor.apply();
             } else {
                 editor.putInt(OTHERSHR, hr);    //storing sharedpreference
                 editor.putInt(OTHERSMIN, min);  //storing sharedpreference
+                editor.putString(OTHERNOTIAPM, apm);
                 editor.apply();
             }
+        }
+
+        if(hr == 12 && ampm == 12){  //if 12pm,
+            hr = 12;
+        }else {
+            hr = Integer.valueOf(beforetime.split(" : ")[0]) + ampm;
         }
 
 

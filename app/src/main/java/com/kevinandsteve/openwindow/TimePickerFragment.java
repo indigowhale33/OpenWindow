@@ -42,7 +42,12 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
             hourOfDay = hourOfDay - 12;
             ampm = "pm";
         }
+        String min = String.valueOf(minute);
+        if(min.length() == 1){
+            min = "0" + min;
+        }
+
         tv.setText("You will be notified daily at "+ String.valueOf(hourOfDay)+" : "
-                + String.valueOf(minute)+ampm);
+                +min + ampm);
     }
 }
