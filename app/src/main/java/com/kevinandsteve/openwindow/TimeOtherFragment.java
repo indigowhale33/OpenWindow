@@ -44,7 +44,7 @@ public class TimeOtherFragment extends DialogFragment implements TimePickerDialo
             ampm = "pm";
         }
 
-        other.setText("People will be notified daily at "+ String.valueOf(hourOfDay)+" : "
+        other.setText("Contacts will be notified daily at "+ String.valueOf(hourOfDay)+" : "
                 + String.valueOf(minute)+ampm);
     }
 }

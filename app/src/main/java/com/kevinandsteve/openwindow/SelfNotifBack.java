@@ -83,17 +83,7 @@ public class SelfNotifBack extends Service{
                     for (int zip = 0; zip < 1; zip++) { // nList.getLength() <- use for multiple days
                         Node nNode = nList.item(zip);
                         Element eElement = (Element) nNode;
-                        //Toast.makeText(SelfNotifBack.this, "DateIssue : " + eElement.getElementsByTagName("DateIssue").item(0).getTextContent(), Toast.LENGTH_SHORT).show();
-//                        xmlshow.append("DateForecast : " + eElement.getElementsByTagName("DateForecast").item(0).getTextContent() + "\n");
-//                        xmlshow.append("Reporting Area : " + eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n");
-//                        xmlshow.append("Parameter Name : " + eElement.getElementsByTagName("ParameterName").item(0).getTextContent() + "\n");
-//                        xmlshow.append("AQI : " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + "\n");
-//                        xmlshow.append("CategoryNumber : " + eElement.getElementsByTagName("CategoryNumber").item(0).getTextContent() + "\n");
-//                        xmlshow.append("CategoryName : " + eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + "\n");
-//                        xmlshow.append("Actionday : " + eElement.getElementsByTagName("ActionDay").item(0).getTextContent() + "\n");
-//                        resp = eElement.getTextContent();
-//                        xmlshow.append(resp);
-//                        xmlshow.append(Integer.toString(nList.getLength()));
+
                         String message = "AQI is " + eElement.getElementsByTagName("AQI").item(0).getTextContent() + " : " +
                                 eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + " From: " +
                                 eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
