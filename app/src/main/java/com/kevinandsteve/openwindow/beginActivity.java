@@ -75,7 +75,7 @@ public class beginActivity extends Activity implements LocationListener {
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if(location != null && location.getTime() > Calendar.getInstance().getTimeInMillis() - 2 * 60 * 1000) {
+        if(location != null ) {
             // Do something with the recent location fix
             zipEnter.setText(getZipCodeFromLocation(location));
         }
@@ -159,9 +159,7 @@ public class beginActivity extends Activity implements LocationListener {
         });
 
         final EditText editText = (EditText) findViewById(R.id.ziptext);
-        if(prefs.getString("USERZIP", null) != null){
-            //editText.setText((prefs.getString("USERZIP", null)));
-        }
+
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -190,6 +188,10 @@ public class beginActivity extends Activity implements LocationListener {
                     Toast toast = Toast.makeText(getApplicationContext(), editText.getText().toString(), Toast.LENGTH_SHORT);
                     toast.show();
                     intent.putExtra("EXTRA_ZIPCODE", message);
+                    editor.remove("USERZIP");
+                    editor.apply();
+                    editor.putInt("USERZIPP", message);
+                    editor.apply();
                     startActivity(intent);
                 }
                 return handled;

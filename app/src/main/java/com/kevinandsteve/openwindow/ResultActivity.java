@@ -6,7 +6,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ public class ResultActivity extends AppCompatActivity {
     TextView resultrate;
     TextView resultratetxt;
     TextView aqicircle;
+    EditText newzip;
     String aqi = "";
     int aqilvl = 0;
     int aqival = 0;
@@ -75,6 +78,7 @@ public class ResultActivity extends AppCompatActivity {
         aqicircle = (TextView) findViewById(R.id.aqicircle);
         resultrate = (TextView) findViewById(R.id.resultrating);
         resultratetxt = (TextView) findViewById(R.id.resultratingtext);
+        newzip = (EditText) findViewById(R.id.zipsearch);
         Intent extras = getIntent();
         int zipcode = -1;
         if (extras != null) {
@@ -175,6 +179,27 @@ public class ResultActivity extends AppCompatActivity {
             }
         };
         thread.start();
+
+        newzip.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //code to do the HTTP request
+                        }
+                    });
+                    thread.start();
+
+                    
+                }
+                return handled;
+            }
+        });
 
 
 //        Exception e) {
