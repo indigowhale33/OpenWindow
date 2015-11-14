@@ -98,9 +98,12 @@ public class NotificationMain extends AppCompatActivity {
         Integer restoredmin = prefs.getInt(MYNOTIMIN, -1);
         String restoredapm = prefs.getString(MYNOTIAPM, "");
         String restore_selfch = prefs.getString(MYNOTICH,"n");
-
+        String strmymin = String.valueOf(restoredmin);
+        if(restoredmin < 10 ){
+            strmymin = "0" + strmymin;
+        }
         if(restoredmin != -1 && restoredhr != -1){  // if no previous time set,
-            timetext.setText("Your notification will be at "+restoredhr + ":" + restoredmin + restoredapm);
+            timetext.setText("Your notification will be at "+restoredhr + ":" + strmymin + restoredapm);
         }else{
             timetext.setText("Set Your Daily Notification");
             ch1.setChecked(false);
@@ -116,8 +119,13 @@ public class NotificationMain extends AppCompatActivity {
         String others_apm = prefs.getString(OTHERNOTIAPM, "");
         String others_ch = prefs.getString(OTHERSNOTICH, "n");  // total other's checkbox
 
+        String strothermin = String.valueOf(others_min);
+        if(restoredmin < 10 ){
+            strothermin = "0" + others_min;
+        }
+
         if(others_hr != -1 && others_min != -1){  // if no previous time set,
-            othertxt.setText("Contacts will receive a daily SMS alert at "+others_hr + ":" + others_min + others_apm);
+            othertxt.setText("Contacts will receive a daily SMS alert at "+others_hr + ":" + strothermin + others_apm);
         }else{
             othertxt.setText("Set Time for SMS Notifications");
             ch2.setChecked(false);
