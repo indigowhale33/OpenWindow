@@ -87,7 +87,7 @@ public class beginActivity extends Activity implements LocationListener {
         }
         else {
 
-            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+//            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
 
         final SharedPreferences.Editor editor = getSharedPreferences(OWPREF, MODE_PRIVATE).edit();

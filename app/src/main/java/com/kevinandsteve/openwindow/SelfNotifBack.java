@@ -90,16 +90,18 @@ public class SelfNotifBack extends Service{
                                 eElement.getElementsByTagName("CategoryName").item(0).getTextContent() + " From: " +
                                 eElement.getElementsByTagName("ReportingArea").item(0).getTextContent() + "\n";
 
-//                        Handler handler = new Handler(Looper.getMainLooper());
-//
-//                        handler.post(new Runnable() {
-//
-//                            @Override
-//                            public void run() {
-//                                Toast.makeText(SelfNotifBack.this.getApplicationContext(),String.valueOf(intent.getIntExtra("requestCode",-1)) + "and" + prefs.getString(MYNOTICH, ""),Toast.LENGTH_LONG).show();
-//                            }
-//                        });
+                        if(prefs.getString(MYNOTICH, "") == "y" && (intent.getIntExtra("requestCode",-1) == 10)) {
+                            Handler handler = new Handler(Looper.getMainLooper());
 
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(SelfNotifBack.this.getApplicationContext(), String.valueOf(intent.getIntExtra("requestCode", -1)) + "and" + prefs.getString(MYNOTICH, ""), Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        }
 
                         if(prefs.getString(MYNOTICH, "") == "y" && (intent.getIntExtra("requestCode",-1) == 10)) { // for user itself notification
 
